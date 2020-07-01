@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <button className="Button">Help!</button>
+      <button className="Button">Press me!</button>
     </div>
   );
 }
