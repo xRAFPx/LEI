@@ -1,6 +1,10 @@
 .App {
+  min-width: 100vh;
   text-align: center;
   background-color: black;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .App-logo {
@@ -40,4 +44,10 @@
 
 .Button{
   background-color: orange;
+  height: 50px;
+  width: 200px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 5px;
 }
