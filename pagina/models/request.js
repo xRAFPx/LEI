@@ -7,6 +7,7 @@ const RequestShema = mongoose.Schema({
     type:{type:mongoose.Schema.Types.ObjectId, ref:"requestType"},
     nature:{type:mongoose.Schema.Types.ObjectId, ref:"requestNature"},
     user:{type:mongoose.Schema.Types.ObjectId, ref:"User"},
+    service:{type:mongoose.Schema.Types.ObjectId, ref:"requestService"},
     attach:{type:mongoose.Schema.Types.Buffer},
     description:{type:String}
 })
