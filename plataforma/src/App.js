@@ -5,6 +5,8 @@ import Admin from './Admin';
 import Pedidos from './Pedidos';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Historico from './Historico';
+import SignUp from './SignUp';
+import Login from './Login';
 
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
           <Route path="/admin" component={Admin}/>
           <Route path="/pedidos" component={Pedidos}/>
           <Route path="/historico" component={Historico}/>
+          <Route path="/signup" component={SignUp}/>
+          <Route path="/login" component={Login}/>
         </Switch>
       </div>
     </Router>

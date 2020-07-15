@@ -20,6 +20,9 @@ function Nav() {
             <Link style={navStyle} to='/Historico'>
             <li>Historico</li>
             </Link>
+            <Link style={navStyle} to='/Login'>
+            <li>Login/SignUp</li>
+            </Link>
         </ul>
     </nav>
   );

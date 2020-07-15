@@ -23,3 +23,14 @@ nav{
   max-width: 100px;
   max-height: 100px;
 }
+
+.Content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button{
+  padding: 10px;
+  border-radius: 2px;
+}
