@@ -20,4 +20,10 @@ router.route('/add').post((req,res)=>{
         .catch(err => res.status(400).json('Error: '+ err));
 });
 
+router.route('/findUser/:email/:password').get((req,res)=>{
+    User.find({Email: req.params.email,Password: req.params.password})
+        .then(user => res.json(user))
+        .catch(err => res.status(400).json('Error: '+ err))
+})
+
 module.exports = router;
