@@ -19,14 +19,14 @@ export default class Nav extends Component{
             this.setState({
               isLoading: false,
             });
-            window.location.href = '/login';
+            window.location = '/login'
           }
         })
     }else{
       this.setState({
         isLoading: false,
       });
-      window.location('/login');
+      window.location = '/login'
     }
   }
   render(){

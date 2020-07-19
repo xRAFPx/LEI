@@ -4,7 +4,7 @@ import './App.css';
 import { getFromStorage } from './Store/UserStore';
 
 export default class SignUp extends Component{
-
+  
   componentDidMount(){
     const obj = getFromStorage('the_main_app');
     if(obj && obj.token){
@@ -16,7 +16,7 @@ export default class SignUp extends Component{
               token,
               isLoading: false,
             });
-            window.location = '/'
+            window.location = '/'   
           } else {
             this.setState({
               isLoading: false,
@@ -69,7 +69,7 @@ export default class SignUp extends Component{
       Email: this.state.Email,
       Password: this.state.Password
     }
-
+    
     console.log(user)
 
     axios.post('http://localhost:5000/users/add', user)
@@ -95,7 +95,7 @@ export default class SignUp extends Component{
             </div>
             <div className="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" required value={this.state.Password} onChange={this.onChangePassword} class="form-control" id="exampleInputPassword1" placeholder="Password"/>
+                <input type="password" required value={this.state.pa} onChange={this.onChangePassword} class="form-control" id="exampleInputPassword1" placeholder="Password"/>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

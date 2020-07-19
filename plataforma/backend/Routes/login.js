@@ -79,10 +79,12 @@ router.route('/logout').get((req,res)=>{
     },null,(err,sessions) =>{
         if(err){
             return res.send({
+                success: false,
                 message: 'Error: Server error'
             })
         }
         return res.send({
+            success: true,
             message:'Good'
         })
     })

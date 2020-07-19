@@ -74,7 +74,7 @@ export default class Login extends Component{
 
     axios.get('http://localhost:5000/users/findUser/'+ user.Email+'/'+user.Password)
       .then(res => {
-          if(res.data.length > 0){
+          if(res.data.success){
             axios.post('http://localhost:5000/account/login/'+user.Email)
               .then(res => {
                 console.log(res.data.success)

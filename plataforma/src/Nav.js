@@ -1,11 +1,46 @@
 import React, {Component} from 'react';
 import './App.css';
 import {Link} from 'react-router-dom';
-import { getFromStorage } from './Store/UserStore';
+import { getFromStorage , setInStorage} from './Store/UserStore';
 import axios from 'axios';
 
 
 export default class Nav extends Component{
+  constructor(props){
+    super(props);
+
+    this.onlogout= this.onlogout.bind(this);
+  }
+
+  onlogout(){
+    const obj = getFromStorage('the_main_app');
+    if(obj && obj.token){
+      const { token } = obj;
+      axios.get('http://localhost:5000/account/logout?token='+ token)
+        .then(res => {
+          if(res.data.success){
+            setInStorage('the_main_app', { token: ''});
+              this.setState({
+                 token: '',
+                 isLoading:false,
+            })
+            document.getElementById("loginNav").style.display = "block";
+            document.getElementById("logoutNav").style.display = "none";
+          } else {
+            this.setState({
+              isLoading: false,
+            });
+            document.getElementById("logoutNav").style.display = "none";
+          }
+        })
+    }else{
+      this.setState({
+        isLoading: false,
+      });
+      document.getElementById("loginNav").style.display = "none";
+      document.getElementById("logoutNav").style.display = "block";
+    }
+  }
   componentDidMount(){
     const obj = getFromStorage('the_main_app');
     if(obj && obj.token){
@@ -50,7 +85,7 @@ export default class Nav extends Component{
             <Link id="loginNav" style={{color: 'white'}} to='/Login'>
             <li>Login/SignUp</li>
             </Link>
-            <Link id="logoutNav" style={{color: 'white'}}>
+            <Link onClick={this.onlogout} id="logoutNav" style={{color: 'white'}}>
             <li>Logout</li>
             </Link>
         </ul>
