@@ -8,15 +8,41 @@ import Historico from './Historico';
 import SignUp from './SignUp';
 import Login from './Login';
 import NavAdmin from './navAdmin';
+import {getFromStorage} from './Store/UserStore';
+import axios from 'axios';
 
 export default class App extends Component{
-  onSubmit(e){
-    e.preventDefault();
-    document.getElementById("NormalNav").style.display = "none";
-    document.getElementById("AdminNav").style.display = "block";
+  constructor(props){
+    super(props);
+
+    this.state = {
+      isLoading: true,
+      token: '',
+    }
   }
-
-
+  componentDidMount(){
+    const obj = getFromStorage('the_main_app');
+    if(obj && obj.token){
+      const { token } = obj;
+      axios.get('http://localhost:5000/account/verify?token='+ token)
+        .then(res => {
+          if(res.data.success){
+            this.setState({
+              token,
+              isLoading: false
+            });
+          } else {
+            this.setState({
+              isLoading: false,
+            });
+          }
+        })
+    }else{
+      this.setState({
+        isLoading: false,
+      });
+    }
+  }
   render(){
   return (
     <Router>
@@ -31,9 +57,6 @@ export default class App extends Component{
           <Route path="/signup" component={SignUp}/>
           <Route  path="/login" component={Login}/>
         </Switch>
-        <form onSubmit={this.onSubmit}>
-          <button type="submit">Teste</button>
-        </form>
       </div>
     </Router>
   );

@@ -4,9 +4,13 @@ const Schema = mongoose.Schema;
 
 const userSessionSchema = new Schema({
     userId: {
-        type: Number,
+        type: String,
         default: -1
     },
+    isDeleted:{
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true,
 });

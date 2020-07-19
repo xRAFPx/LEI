@@ -1,8 +1,34 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import './App.css';
+import { getFromStorage } from './Store/UserStore';
 
 export default class SignUp extends Component{
+
+  componentDidMount(){
+    const obj = getFromStorage('the_main_app');
+    if(obj && obj.token){
+      const { token } = obj;
+      axios.get('http://localhost:5000/account/verify?token='+ token)
+        .then(res => {
+          if(res.data.success ){
+            this.setState({
+              token,
+              isLoading: false,
+            });
+            window.location = '/'
+          } else {
+            this.setState({
+              isLoading: false,
+            });
+          }
+        })
+    }else{
+      this.setState({
+        isLoading: false,
+      });
+    }
+  }
   constructor(props) {
     super(props);
 

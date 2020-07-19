@@ -2,10 +2,35 @@ import React, {Component} from 'react';
 import './App.css';
 import axios from 'axios';
 import  { Link } from 'react-router-dom';
+import {getFromStorage, setInStorage } from './Store/UserStore';
 
 
 export default class Login extends Component{
 
+  componentDidMount(){
+    const obj = getFromStorage('the_main_app');
+    if(obj && obj.token){
+      const { token } = obj;
+      axios.get('http://localhost:5000/account/verify?token='+ token)
+        .then(res => {
+          if(res.data.success ){
+            this.setState({
+              token,
+              isLoading: false,
+            });
+            window.location = '/'
+          } else {
+            this.setState({
+              isLoading: false,
+            });
+          }
+        })
+    }else{
+      this.setState({
+        isLoading: false,
+      });
+    }
+  }
   constructor(props){
     super(props);
 
@@ -16,7 +41,8 @@ export default class Login extends Component{
     this.state = {
       Email: '',
       Password: '',
-      LoggedIn: false,
+      token: '',
+      isLoading: true,
     }
 
     
@@ -33,6 +59,7 @@ export default class Login extends Component{
     });
     document.getElementById("warning").style.display = "none";
   }
+
   
 
   onSubmit(e){
@@ -41,7 +68,6 @@ export default class Login extends Component{
     const user = {
       Email: this.state.Email,
       Password: this.state.Password,
-      LoggedIn: this.state.LoggedIn
     }
 
     console.log(user)
@@ -49,12 +75,22 @@ export default class Login extends Component{
     axios.get('http://localhost:5000/users/findUser/'+ user.Email+'/'+user.Password)
       .then(res => {
           if(res.data.length > 0){
-            user.LoggedIn = true;
-            axios.post('http://localhost:3000/', user.LoggedIn)
+            axios.post('http://localhost:5000/account/login/'+user.Email)
+              .then(res => {
+                console.log(res.data.success)
+                if(res.data.success){
+                  setInStorage('the_main_app', { token: res.data.token});
+                  this.setState({
+                    token: res.data.token,
+                    isLoading:false,
+                  })
+                  window.location = '/'
+                }
+              })
           }
           else{
             document.getElementById("warning").style.display = "block";
-            console.log(user.LoggedIn);
+            
           }
       })
       .catch((error)=>{
