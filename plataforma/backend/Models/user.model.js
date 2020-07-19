@@ -12,6 +12,10 @@ const userSchema = new Schema({
     Password: {
         type: String,
     },
+    Role: {
+        type: Number,
+        default: 1,
+    },
 }, {
     timestamps: true,
 });

@@ -5,6 +5,7 @@ import  { Link } from 'react-router-dom';
 
 
 export default class Login extends Component{
+
   constructor(props){
     super(props);
 
@@ -14,7 +15,8 @@ export default class Login extends Component{
 
     this.state = {
       Email: '',
-      Password: ''
+      Password: '',
+      LoggedIn: false,
     }
 
     
@@ -31,13 +33,15 @@ export default class Login extends Component{
     });
     document.getElementById("warning").style.display = "none";
   }
+  
 
   onSubmit(e){
     e.preventDefault();
 
     const user = {
       Email: this.state.Email,
-      Password: this.state.Password
+      Password: this.state.Password,
+      LoggedIn: this.state.LoggedIn
     }
 
     console.log(user)
@@ -45,10 +49,12 @@ export default class Login extends Component{
     axios.get('http://localhost:5000/users/findUser/'+ user.Email+'/'+user.Password)
       .then(res => {
           if(res.data.length > 0){
-            window.location = '/';
+            user.LoggedIn = true;
+            axios.post('http://localhost:3000/', user.LoggedIn)
           }
           else{
             document.getElementById("warning").style.display = "block";
+            console.log(user.LoggedIn);
           }
       })
       .catch((error)=>{
