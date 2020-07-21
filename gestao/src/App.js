@@ -1,65 +1,153 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form';
 import './App.css';
 import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Service from "./data/service.json";
+import requestType from "./data/requestType.json";
+import requestNature from "./data/requestNature.json";
+import requestPriority from "./data/requestPriority.json";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Media from 'react-bootstrap/Media';
+import Title from './components/Title';
 
-function App() {
-  return (
-    <div className="App">
-      <Form>
-        <Form.Row>
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Email</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" />
-          </Form.Group>
 
-          <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
-          </Form.Group>
-        </Form.Row>
+class FormPage extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      image: null
+    };
+    this.loadPicture = this.loadPicture.bind(this);
+    this.closePicture = this.closePicture.bind(this);
+  }
 
-        <Form.Group controlId="formGridAddress1">
-          <Form.Label>Address</Form.Label>
-          <Form.Control placeholder="1234 Main St" />
-        </Form.Group>
+  loadPicture() {
+    document.getElementById("myModal").style.display = 'block';
+    var srcImg = document.getElementById("image").src;
+    document.getElementById("img").src = srcImg;
+  }
 
-        <Form.Group controlId="formGridAddress2">
-          <Form.Label>Address 2</Form.Label>
-          <Form.Control placeholder="Apartment, studio, or floor" />
-        </Form.Group>
+  closePicture() {
+    document.getElementById("myModal").style.display = 'none';
+  }
 
-        <Form.Row>
-          <Form.Group as={Col} controlId="formGridCity">
-            <Form.Label>City</Form.Label>
-            <Form.Control />
-          </Form.Group>
+  render(){
+    return (
+    <div>
+      <div id = "myModal" className = "modal">
+        <span className="close" onClick={this.closePicture}>&times;</span>
+        <img className="modal-content" id="img" alt='open'/>
+      </div>
+      <div className="App">
+        <Title/>
+        <p>Novo Pedido</p>
+      </div>
+      <div className='container'>
+        <Form>
+            <Form.Group as={Row} controlId="formRequestType">
+              <Form.Label column sm="2">Tipo de pedido: </Form.Label>
+              <Col sm="10">
+                <Form.Control as="select" defaultValue={requestType[0].Value} htmlSize={5} custom>
+                {requestType.map((e, key) => {
+                return <option key={key} value={e.Key}>{e.Value}</option>;
+                  })}
+              </Form.Control>
+              </Col>
+            </Form.Group>
 
-          <Form.Group as={Col} controlId="formGridState">
-            <Form.Label>State</Form.Label>
-            <Form.Control as="select" defaultValue="Choose...">
-              <option>Choose...</option>
-              <option>...</option>
-            </Form.Control>
-          </Form.Group>
+            <Form.Group as={Row} controlId="formRequestNature">
+              <Form.Label column sm="2">Natureza do pedido: </Form.Label>
+              <Col sm="10">
+                <Form.Control as="select" defaultValue={requestNature[0].Value} htmlSize={5} custom>
+                  {requestNature.map((e, key) => {
+                  return <option key={key} value={e.Key}>{e.Value}</option>;
+                    })}
+              </Form.Control>
+              </Col>
+            </Form.Group>
+            
+            <Form.Group as={Row} controlId="formService">
+              <Form.Label column sm="2">Serviço: </Form.Label>
+              <Col sm="10">
+                <Form.Control as="select" defaultValue={Service[0].Value} htmlSize={5} custom>
+                {Service.map((e, key) => {
+                return <option key={key} value={e.Key}>{e.Value}</option>;
+                  })}
+              </Form.Control>
+              </Col>
+            </Form.Group>
+            
+            <Form.Group as={Row} controlId="formRequester">
+              <Form.Label column sm="2">Requisitante: </Form.Label>
+              <Col sm="10">
+                <Form.Control plaintext readOnly defaultValue={requestPriority[1].Value} />
+              </Col>
+            </Form.Group>
 
-          <Form.Group as={Col} controlId="formGridZip">
-            <Form.Label>Zip</Form.Label>
-            <Form.Control />
-          </Form.Group>
-        </Form.Row>
+            <Form.Group as={Row} controlId="formRequesterEmail">
+              <Form.Label column sm="2">Email: </Form.Label>
+              <Col sm="10">
+                <Form.Control plaintext readOnly defaultValue={requestPriority[1].Value} />
+              </Col>
+            </Form.Group>
 
-        <Form.Group id="formGridCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group>
+            <Form.Group as={Row} controlId="formRequesterContact">
+              <Form.Label column sm="2">Contacto: </Form.Label>
+              <Col sm="10">
+                <Form.Control plaintext readOnly defaultValue={requestPriority[1].Value} />
+              </Col>
+            </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    </div>
+            <Form.Group as={Row} controlId="formDescription">
+              <Form.Label column sm="2">Descrição: </Form.Label>
+              <Col sm="10">
+                <Form.Control as="textarea" rows="5" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} controlId="formScreenshot">
+              <Form.Label column sm="2">Captura automática de ecrã: </Form.Label>
+              <Col sm="10">
+                <Media as="li">
+                  <img id ='image' onClick={this.loadPicture} width={64} height={64} className="mr-3" src="http://placehold.it/64x64" alt="Screenshot" />
+                </Media>
+              </Col>
+            </Form.Group>
+                            
+            <Form.Group as={Row} controlId="formAttachments">
+              <Form.Label column sm="2">Anexos: </Form.Label>
+              <Col sm="10">
+                <Form.File id="exampleFormControlFile1"/>
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} controlId="formRequestPriority">
+              <Form.Label column sm="2">Prioridade: </Form.Label>
+              <Col sm="10">
+                <Form.Control as="select" defaultValue={requestPriority[1].Value}>
+                  {requestPriority.map((e, key) => {
+                  return <option key={key} value={e.Key}>{e.Value}</option>;
+                    })}
+                </Form.Control>
+              </Col>
+            </Form.Group>
+
+            <button className = 'requestButton' variant="primary" type="submit">Confirmar</button>
+            {/* <Link
+            to={{
+              pathname: "/",
+              state: props.location.state
+            }}
+          > */}
+            <button className = 'requestButton' type="button" value="cancel">Cancelar</button>
+            {/* </Link> */}
+          </Form>
+      </div>
+    </div>   
   );
+  }
+
 }
 
-export default App;
+export default FormPage;
