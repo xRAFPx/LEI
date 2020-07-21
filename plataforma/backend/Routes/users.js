@@ -55,4 +55,51 @@ router.route('/add').post((req,res)=>{
         console.log(error)
     }
 });
+
+router.route('/update').post((req,res)=>{
+    const Name = req.body.Name;
+    const Email = req.body.Email;
+    const Role = req.body.Role;
+    const Id = req.body.id;
+
+    User.findOneAndUpdate({
+        _id:  Id,
+    },{
+        $set:{
+            Name: Name,
+            Email: Email,
+            Role: Role
+        }
+    }, null,(err)=>{
+        if(err){
+            return res.send({
+                success: false,
+                message: 'Error: Server error'
+            })
+        }
+        return res.send({
+            success: true,
+            message:'Good'
+        })
+    })
+});
+
+router.route('/delete').post((req,res)=>{
+    const id = req.body.id
+
+    User.findOneAndDelete({
+        _id: id
+    },null,(err)=>{
+        if(err){
+            return res.send({
+                success: false,
+                message: 'Error: Server error'
+            })
+        }
+        return res.send({
+            success: true,
+            message:'Good'
+        })
+    })
+})
 module.exports = router;

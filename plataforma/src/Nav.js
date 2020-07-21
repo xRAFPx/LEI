@@ -24,12 +24,15 @@ export default class Nav extends Component{
                  token: '',
                  isLoading:false,
             })
+            window.location = '/'
             document.getElementById("loginNav").style.display = "block";
             document.getElementById("logoutNav").style.display = "none";
+            document.getElementById("AdminNav").style.display = "none";
           } else {
             this.setState({
               isLoading: false,
             });
+            document.getElementById("AdminNav").style.display = "none";
             document.getElementById("logoutNav").style.display = "none";
           }
         })
@@ -52,12 +55,21 @@ export default class Nav extends Component{
               token,
               isLoading: false,
             });
+            axios.get('http://localhost:5000/account/verifyAdmin?token='+ token)
+              .then(res=>{
+                if(res.data.success){
+                  document.getElementById("AdminNav").style.display = "block";
+                }else{
+                  document.getElementById("AdminNav").style.display = "none";
+                }
+              });
             document.getElementById("loginNav").style.display = "none";
             document.getElementById("logoutNav").style.display = "block";
           } else {
             this.setState({
               isLoading: false,
             });
+            document.getElementById("AdminNav").style.display = "none";
             document.getElementById("logoutNav").style.display = "none";
           }
         })
@@ -65,6 +77,7 @@ export default class Nav extends Component{
       this.setState({
         isLoading: false,
       });
+      document.getElementById("AdminNav").style.display = "none";
       document.getElementById("loginNav").style.display = "block";
       document.getElementById("logoutNav").style.display = "none";
     }
@@ -76,6 +89,9 @@ export default class Nav extends Component{
         <img className="logo" alt="" src="https://media-exp1.licdn.com/dms/image/C4D0BAQE-rnsTh-ulCw/company-logo_200_200/0?e=2159024400&v=beta&t=KhMYMChYokF5RFiESFcGCoeXHPV6HpMrurSIMdK6yIo"></img>
         </Link>
         <ul className="nav-links">
+            <Link id="AdminNav" style={{color: 'white'}} to='/admin'>
+            <li>Clientes</li>
+            </Link>
             <Link style={{color: 'white'}} to='/Pedidos'>
             <li>Pedidos</li>
             </Link>

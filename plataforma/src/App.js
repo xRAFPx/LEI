@@ -7,7 +7,6 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Historico from './Historico';
 import SignUp from './SignUp';
 import Login from './Login';
-import NavAdmin from './navAdmin';
 import {getFromStorage} from './Store/UserStore';
 import axios from 'axios';
 
@@ -47,8 +46,7 @@ export default class App extends Component{
   return (
     <Router>
       <div className="App">
-        <div id="NormalNav"><Nav/></div>
-        <div style={{display: 'none'}} id="AdminNav"><NavAdmin/></div>
+        <div><Nav/></div>
         <Switch>
           <Route path="/" exact component={Home}/>
           <Route path="/admin" component={Admin}/>
