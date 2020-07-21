@@ -1,0 +1,40 @@
+.App {
+  text-align: center;
+}
+
+nav{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 10vh;
+  background: rgb(45, 49, 53);
+  color : black;
+}
+
+.nav-links{
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
+
+.logo{
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.Content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button{
+  padding: 10px;
+  border-radius: 2px;
+}
+
+.warning{
+  color: red;
+}
