@@ -1,35 +1,40 @@
-import React, {Component} from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, Fragment } from 'react';
+import { render } from 'react-dom';
+import Hello from './Hello';
+import ScreenCapture from './ScreenCapture'
+import './style.css';
 
-class App  extends Component{
-
-  async postData(){
-      try{
-          let result= await fetch('https://webhook.site/60821a8a-fe1b-4c64-849a-6d982b94e6a9', {
-            method: 'post',
-            mode: 'no-cors',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                key1: 'myusername'
-            })
-          });
-          console.log('result' + result)
-      }catch(e){
-        console.log(e)
-      }
+class App extends Component {
+  state = {
+    name: 'GAMO',
+    screenCapture: ''
   }
-  render() {
 
+  handleScreenCapture = (screenCapture) => {
+    this.setState({
+      screenCapture
+    })
+  }
+
+  render() {
+    const { screenCapture } = this.state
     return (
-      <div className="App">
-        <button onClick={() => this.postData() } className="Button">Press me!</button>
-      </div>
+      <ScreenCapture onEndCapture={this.handleScreenCapture}>
+        {({ onStartCapture }) => (
+          <Fragment>
+            <Hello name={this.state.name} />
+            <p>
+              Start editing to see some magic happen :)
+            </p>
+            <button onClick={onStartCapture}>Capture</button>
+            <br/>
+            <br/>
+            <img src={screenCapture} />
+          </Fragment>
+        )}
+      </ScreenCapture>
     );
   }
-} 
+}
 
-export default App;
+render(<App />, document.getElementById('root'));
