@@ -24,7 +24,7 @@ export default class Nav extends Component{
                  token: '',
                  isLoading:false,
             })
-            window.location = '/'
+            window.location = '/  '
             document.getElementById("loginNav").style.display = "block";
             document.getElementById("logoutNav").style.display = "none";
             document.getElementById("AdminNav").style.display = "none";
