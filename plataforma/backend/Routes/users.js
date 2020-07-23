@@ -52,7 +52,9 @@ router.route('/add').post((req,res)=>{
                 })
         });
     }catch (error){
-        console.log(error)
+        return res.send({
+            success: false
+        })
     }
 });
 
