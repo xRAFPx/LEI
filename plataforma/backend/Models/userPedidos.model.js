@@ -3,17 +3,35 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const pedidosSchema = new Schema({
-    Serviço: {
+    Servico: {
         type: String,
     },
     TipoDePedido: {
         type: String,
     },
+    NaturezaDePedido: {
+        type: String,
+    },
     Prioridade: {
         type: String,
     },
-    User: {
+    Requisitante: {
+        type: String,
+    },
+    Email: {
+        type: String,
+    },
+    Contacto: {
         type: Number,
+    },
+    Erro: {
+        type: String,
+    },
+    Descricao: {
+        type: String,
+    },
+    User: {
+        type: String,
         default: -1,
     },
 }, {

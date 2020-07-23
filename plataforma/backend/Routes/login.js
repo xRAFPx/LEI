@@ -53,13 +53,17 @@ router.route('/verify').get((req,res)=>{
         }
 
         if(sessios.length != 1){
+         
             return res.send({
+
                 success: false,
                 message: 'Error: invalid'
             });
 
         }else{
+            const userId = sessios[0].userId
             return res.send({
+                userId,
                 success: true,
                 message: 'Good'
             });
