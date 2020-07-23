@@ -25,7 +25,7 @@ router.route('/add').post((req,res)=>{
             Password = hash;
             const newUser = new User({Name,Email,Password});
                 newUser.save()
-                  .then(()=> res.json(hash))
+                  .then(()=> res.json(user))
                   .catch(err => res.status(400).json('Error: '+ err));
         })
     })
