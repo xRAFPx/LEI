@@ -23,14 +23,14 @@ const getEmailHtml = (body) => {
            <title>Dados</title>
        </head>
            <body style="margin: 0; padding: 0;">
-              <label>Tipo de pedido: `+ body.tipoPedido +`</label><br />
-              <label>Natureza de pedido: `+ body.naturezaPedido +`</label><br />
-              <label>Servico: `+ body.servico +`</label><br />
-              <label>Requesitante: `+ body.requesitante +`</label><br />
-              <label>Email: `+ body.email +`</label><br />
-              <label>Contacto: `+ body.contacto +`</label><br />
-              <label>Erro: `+ body.erro +`</label><br />
-              <label>Descricao: `+ body.descricao +`</label><br />
+              <label>Tipo de pedido: `+ body.tipoPedido +`;</label><br />
+              <label>Natureza de pedido: `+ body.naturezaPedido +`;</label><br />
+              <label>Servico: `+ body.servico +`;</label><br />
+              <label>Requesitante: `+ body.requesitante +`;</label><br />
+              <label>Email: `+ body.email +`;</label><br />
+              <label>Contacto: `+ body.contacto +`;</label><br />
+              <label>Erro: `+ body.erro +`;</label><br />
+              <label>Descricao: `+ body.descricao +`;</label><br />
               <label>Prioridade: `+ body.prioridade +`</label><br />
            </body>
    

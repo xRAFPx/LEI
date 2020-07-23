@@ -93,8 +93,10 @@ function App() {
       imagem,
       ficheiros
     }
-
     axios.post("/api/sendMail", dataToSubmit)
+     .then(res => {
+       console.log(res.data);
+     })
   }
   
   const loadPicture = event =>{
