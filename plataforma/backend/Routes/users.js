@@ -10,6 +10,14 @@ router.route('/').get((req,res)=>{
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/userpedidos').get((req,res)=>{
+    User.find({
+        Role: 1
+    })
+        .then(users => res.json(users))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 router.route('/add').post((req,res)=>{
     const Name = req.body.Name;
     const Email = req.body.Email;

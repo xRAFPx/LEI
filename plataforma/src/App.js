@@ -9,6 +9,7 @@ import SignUp from './SignUp';
 import Login from './Login';
 import {getFromStorage} from './Store/UserStore';
 import axios from 'axios';
+import AdminPedidos from './AdminPedidos';
 
 export default class App extends Component{
   constructor(props){
@@ -49,7 +50,8 @@ export default class App extends Component{
         <div><Nav/></div>
         <Switch>
           <Route path="/" exact component={Home}/>
-          <Route path="/admin" component={Admin}/>
+          <Route path="/adminpedidos" component={AdminPedidos}/>
+          <Route path="/admin" exact component={Admin}/>
           <Route path="/pedidos" component={Pedidos}/>
           <Route path="/historico" component={Historico}/>
           <Route path="/signup" component={SignUp}/>

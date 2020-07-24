@@ -77,7 +77,6 @@ export default class Admin extends Component {
     this.setState({
       Name: e.target.value
     });
-    console.log(this.state.Name);
   }
   onChangeEmail(e){
     this.setState({
@@ -108,7 +107,7 @@ export default class Admin extends Component {
         }
       })
   }
-  componentDidMount(){
+  componentWillMount(){
     const obj = getFromStorage('the_main_app');
     if(obj && obj.token){
       const { token } = obj;

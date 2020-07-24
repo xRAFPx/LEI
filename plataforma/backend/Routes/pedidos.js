@@ -2,25 +2,19 @@ const router = require('express').Router();
 const Pedidos = require('../Models/userPedidos.model');
 let user = require('../Models/user.model');
 const User = require('../Models/user.model');
-const { route } = require('./users');
 const TipoDePedido = require('../Models/userTipoDePedido.model');
 const Servico = require('../Models/userServiço.model');
 const Prioridade = require('../Models/userPrioridade.model');
 const NaturezaDePedido = require('../Models/userNaturazaDePedido.model')
-const { default: Axios } = require('axios');
 
 router.route('/clientpedidos/:id').get((req,res)=>{
     const userId = req.params.id
     Pedidos.find({
         User: userId
-    },(err, pedidos)=>{
-        if(err){
-            return res.send({
-                success: false
-            })
-        }
-        return res.send(pedidos)
-    })
+    }).populate({path:'Servico',select:'Name -_id'}).populate({path:'NaturezaDePedido',select:'Name -_id'}).populate({path:'Prioridade',select:'Name -_id'}).populate({path:'TipoDePedido',select:'Name -_id'})
+        .then(pedidos =>{
+            res.json(pedidos)
+        })
 })
 
 router.route('/addPedidoUser').post((req,res)=>{
@@ -198,5 +192,21 @@ router.route('/servico/:id').get((req,res)=>{
             return res.send(servicos[0].Name)
         }
     })
+})
+
+router.route('/teste/:id').get((req,res) => {
+    Pedidos.findOne({_id:req.params.id}).populate('Servico').populate('NaturezaDePedido')
+        .then(pedido =>{
+            return res.send(pedido.NaturezaDePedido.Name)
+        })
+})
+
+router.route('/').get((req,res) => {
+    Pedidos.find({
+        User:null
+    }).populate({path:'Servico',select:'Name -_id'}).populate({path:'NaturezaDePedido',select:'Name -_id'}).populate({path:'Prioridade',select:'Name -_id'}).populate({path:'TipoDePedido',select:'Name -_id'}).populate({path:'User',select:'Name -_id'})
+        .then(pedidos =>{
+            res.json(pedidos)
+        })
 })
 module.exports = router;

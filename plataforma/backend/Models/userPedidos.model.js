@@ -4,16 +4,20 @@ const Schema = mongoose.Schema;
 
 const pedidosSchema = new Schema({
     Servico: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Servicos'
     },
     TipoDePedido: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'TipoDePedidos'
     },
     NaturezaDePedido: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'NaturezaDePedidos'
     },
     Prioridade: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Prioridades'
     },
     Requisitante: {
         type: String,
@@ -31,8 +35,9 @@ const pedidosSchema = new Schema({
         type: String,
     },
     User: {
-        type: String,
-        default: -1,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
     },
 }, {
     timestamps: true,

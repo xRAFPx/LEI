@@ -14,20 +14,21 @@ export default class Pedidos extends Component{
     this.getServico = this.getServico.bind(this);
 
     this.state = {
-      show : false,
-      prioridade: "",
-      tipoDePedido: "",
-      servico: "",
-      erro: "",
+      show : false,   
+      Descricao: "",
+      Erro: "",
+      Requisitanta: "",
       userid : "",
-      pedidos: []
+      pedidos: [[]]
     }
 
   }
   handleShow(pedido){
-    console.log(this.state.userid)
     this.setState({
-      show: true
+      show: true,
+      Erro: pedido.Erro,
+      Requisitante: pedido.Requisitante,
+      Descricao: pedido.Descricao
     })
   }
   handleClose(){
@@ -41,7 +42,7 @@ export default class Pedidos extends Component{
           return (res.data)
         })
   }
-  componentDidMount(){
+  componentWillMount(){
     const obj = getFromStorage('the_main_app');
     if(obj && obj.token){
       const { token } = obj;
@@ -53,13 +54,12 @@ export default class Pedidos extends Component{
               isLoading: false,
               userid: res.data.userId
             });
-            axios.get('http://localhost:5000/pedidos/clientpedidos/' + res.data.userId)
-              .then(res =>{
-                this.setState({
-                 pedidos: res.data
-              })  
-              console.log(res.data)
-           })
+            axios.get('http://localhost:5000/pedidos/clientpedidos/'+ res.data.userId)
+            .then(res =>{
+              this.setState({
+                pedidos: res.data
+              })
+            })
           } else {
             this.setState({
               isLoading: false,
@@ -77,18 +77,21 @@ export default class Pedidos extends Component{
     
   }
   renderTableData(){
-    return this.state.pedidos.map((pedido, index)=> {
-        return(
-          <tr>
-            <th><input type="checkbox"></input></th>
-            <th scope="row">{index+1}</th>
-            <td>{pedido.Erro}</td>
-            <td>{this.getServico(pedido)}</td>
-            <td>{pedido.TipoDePedido}</td>
-            <td>{pedido.Prioridade}</td>
-            <td><button type="button" className="btn btn-warning" onClick={() =>this.handleShow(pedido)} style={{marginRight: 10 }}>Mais Info</button></td>
-          </tr>
-        )
+    return this.state.pedidos.map((pedido, index)=>{
+          if(pedido.length!==0){
+            return(
+              <tr>
+                <th><input type="checkbox"></input></th>
+                <th scope="row">{index+1}</th>
+                <td>{pedido.Erro}</td>
+                <td>{pedido.Servico.Name}</td>
+                <td>{pedido.TipoDePedido.Name}</td>
+                <td>{pedido.Prioridade.Name}</td>
+                <td><button type="button" className="btn btn-warning" onClick={() =>this.handleShow(pedido)} style={{marginRight: 10 }}>Mais Info</button></td>
+              </tr>
+            )
+          }
+          return(null)
     })
   }
   render(){
@@ -113,14 +116,28 @@ export default class Pedidos extends Component{
           </tbody>
         </table>
       </div>
-      <button variant="primary" onClick={this.handleShow}>
-        Launch demo modal
-      </button>
       <Modal show={this.state.show} onHide={this.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Header closeButton={this.handleClose}>
+          <Modal.Title>Mais info</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+        <div className="Content">
+            <form>
+                <div class="form-group">
+                    <label style={{marginRight: 10 }}>Erro:</label>
+                    <input readOnly={true} value={this.state.Erro} />
+                </div>
+                <div class="form-group">
+                    <label style={{marginRight: 10 }}>Descrição:</label>
+                    <input readOnly={true} value={this.state.Descricao}/>
+                </div>
+                <div class="form-group">
+                    <label style={{marginRight: 10 }}>Requisitante:</label>
+                    <input readOnly={true} value={this.state.Requisitante} />
+                </div>
+            </form>
+          </div>
+        </Modal.Body>
       </Modal>
       </div>
     );
