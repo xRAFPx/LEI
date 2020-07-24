@@ -21,6 +21,7 @@
     "imap": "^0.8.19",
     "js-base64": "^3.2.4",
     "mailparser": "^2.8.0",
+    "mongoose": "^5.9.25",
     "nodemailer": "^6.4.10",
     "open": "^7.1.0",
     "react-bootstrap": "^1.2.2",

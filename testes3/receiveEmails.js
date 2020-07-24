@@ -1,10 +1,10 @@
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
+const Pedidos = require('./userPedidos.model');
 
 const getEmails = () => {
 
-    let dados = [];
     // If modifying these scopes, delete token.json.
     const SCOPES = ['https://mail.google.com/'];
     // The file token.json stores the user's access and refresh tokens, and is
@@ -86,7 +86,7 @@ const getEmails = () => {
             const messages = res.data.messages;
             if (messages != undefined && messages.length) {        
                 readMessages(gmail, userID, messages);
-                // changeMessages(gmail, userID, messages)
+                changeMessages(gmail, userID, messages)
             } else {
             console.log('No messages found.');
             }
@@ -104,8 +104,7 @@ const getEmails = () => {
             }, (err, res) => {
                     if (err) return console.log('The API returned an error: ' + err);
                     // console.log(res.data.snippet); //dados do formulario
-                    dados.push(res.data.snippet);
-                    console.log(dados);
+                    translateEmail(res.data.snippet);
                     const parts = res.data.payload.parts;
                     if (messages.length) {
                         readAttachements(gmail, userID, messageID, parts);
@@ -136,6 +135,21 @@ const getEmails = () => {
         });
     });
     } catch(e) {console.log(e);}
+    }
+
+    function translateEmail(message){
+        var data = message.split(';');
+        var pedido = new Pedidos();
+        pedido.TipoDePedido = data[0].replace("Tipo de pedido: ", "");
+        pedido.NaturezaDePedido = data[1].replace(" Natureza de pedido: ", "");
+        pedido.Servico = data[2].replace(" Servico: ", "");
+        pedido.Requisitante = data[3].replace(" Requesitante: ", "");
+        pedido.Email = data[4].replace(" Email: ", "");
+        pedido.Contacto = data[5].replace(" Contacto: ", "");
+        pedido.Erro = data[6].replace(" Erro: ", "");
+        pedido.Descricao = data[7].replace(" Descricao: ", "");
+        pedido.Prioridade = data[8].replace(" Prioridade: ", "");
+        pedido.save();
     }
 
     function readAttachements(gmail, userID, messageID, parts){
