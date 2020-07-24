@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { render } from 'react-dom';
 import ScreenCapture from './ScreenCapture'
 import './style.css';
-import {Col} from 'react-bootstrap'
-import {Image} from 'react-bootstrap'
+import screenshot from './Screenshot.jpg';
 
 class App extends Component {
   state = {
@@ -28,11 +27,18 @@ class App extends Component {
           {({ onStartCapture }) => (
             <Fragment>
               <button onClick={onStartCapture}>Capture</button>
+              <img src={screenshot} width="100%"/>
             </Fragment>
           )}
         </ScreenCapture>
         <div id="myModal" className="modal">
-          <img className="modal-content" src={screenCapture} alt="open"/>
+          <div className="modal-content">
+            <div className="inner-block">
+              <img id="img" alt="open" src={screenCapture} width="100%"/><br/>
+              <button className = 'requestButton' variant="primary" type="submit">Submeter</button>
+              <button className = 'requestButton' type="button" value="cancel" onClick={closePicture}>Cancelar</button>
+            </div>
+          </div>
         </div>
       </div>
     );
