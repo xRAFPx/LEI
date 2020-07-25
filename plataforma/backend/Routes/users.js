@@ -10,6 +10,14 @@ router.route('/').get((req,res)=>{
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/userpedidos').get((req,res)=>{
+    User.find({
+        Role: 1
+    })
+        .then(users => res.json(users))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 router.route('/add').post((req,res)=>{
     const Name = req.body.Name;
     const Email = req.body.Email;
@@ -25,7 +33,7 @@ router.route('/add').post((req,res)=>{
             Password = hash;
             const newUser = new User({Name,Email,Password});
                 newUser.save()
-                  .then(()=> res.json(hash))
+                  .then(()=> res.json(user))
                   .catch(err => res.status(400).json('Error: '+ err));
         })
     })
@@ -52,7 +60,56 @@ router.route('/add').post((req,res)=>{
                 })
         });
     }catch (error){
-        console.log(error)
+        return res.send({
+            success: false
+        })
     }
 });
+
+router.route('/update').post((req,res)=>{
+    const Name = req.body.Name;
+    const Email = req.body.Email;
+    const Role = req.body.Role;
+    const Id = req.body.id;
+
+    User.findOneAndUpdate({
+        _id:  Id,
+    },{
+        $set:{
+            Name: Name,
+            Email: Email,
+            Role: Role
+        }
+    }, null,(err)=>{
+        if(err){
+            return res.send({
+                success: false,
+                message: 'Error: Server error'
+            })
+        }
+        return res.send({
+            success: true,
+            message:'Good'
+        })
+    })
+});
+
+router.route('/delete').post((req,res)=>{
+    const id = req.body.id
+
+    User.findOneAndDelete({
+        _id: id
+    },null,(err)=>{
+        if(err){
+            return res.send({
+                success: false,
+                message: 'Error: Server error'
+            })
+        }
+        return res.send({
+            success: true,
+            message:'Good'
+        })
+    })
+})
 module.exports = router;

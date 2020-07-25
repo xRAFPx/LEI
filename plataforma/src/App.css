@@ -38,3 +38,14 @@ nav{
 .warning{
   color: red;
 }
+
+.Table{
+  margin-left: 30px;
+  margin-right: 40px;
+}
+
+.acceptButton{
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+}

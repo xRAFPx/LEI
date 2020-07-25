@@ -10,6 +10,7 @@ import requestPriority from "./data/requestPriority.json";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Media from 'react-bootstrap/Media';
 import Title from './components/Title';
+import screenshot from './Screenshot.jpg';
 
 class FormPage extends React.Component {
   constructor(props){
@@ -36,10 +37,13 @@ class FormPage extends React.Component {
     this.handlePriorityChange = this.handlePriorityChange.bind(this);
   }
 
+  ficheiros() {
+    console.log(document.getElementById("exampleFormControlFile1").file);
+  }
+
   loadPicture() {
     document.getElementById("myModal").style.display = 'block';
-    var srcImg = document.getElementById("image").src;
-    document.getElementById("img").src = srcImg;
+    document.getElementById("img").src = screenshot;
   }
 
   closePicture() {
@@ -176,7 +180,7 @@ class FormPage extends React.Component {
             <Form.Group as={Row} controlId="formAttachments">
               <Form.Label column sm="2">Anexos: </Form.Label>
               <Col sm="10">
-                <Form.File id="exampleFormControlFile1" ref={this.fileInput}/>
+                <Form.File id="exampleFormControlFile1" onChange={this.ficheiros}/>
               </Col>
             </Form.Group>
 

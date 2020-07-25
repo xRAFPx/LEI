@@ -47,19 +47,23 @@ router.route('/verify').get((req,res)=>{
     }, (err, sessios)=>{
         if(err){
             return res.send({
-                success: true,
+                success: false,
                 message: 'Error: Server error'
             })
         }
 
         if(sessios.length != 1){
+         
             return res.send({
+
                 success: false,
                 message: 'Error: invalid'
             });
 
         }else{
+            const userId = sessios[0].userId
             return res.send({
+                userId,
                 success: true,
                 message: 'Good'
             });
@@ -88,6 +92,60 @@ router.route('/logout').get((req,res)=>{
             message:'Good'
         })
     })
+});
+
+router.route('/verifyAdmin').get((req,res)=>{
+    const {query} = req;
+    const {token} = query;
+    UserSession.find({
+        _id: token,
+    }, (err, sessios)=>{
+        if(err){
+            return res.send({
+                success: false,
+                message: 'Error: Server error'
+            })
+        }
+
+        if(sessios.length != 1){
+            return res.send({
+                success: false,
+                message: 'Error: invalid'
+            });
+
+        }else{
+            User.find({
+                _id: sessios[0].userId,
+            },(err,users) =>{
+                if(err){
+                    return res.send({
+                        success: false,
+                        message: 'Error: Server error'
+                    })
+                }
+                if(users.length != 1){
+                    return res.send({
+                        users: sessios[0].userId,
+                        success: false,
+                        message: 'Error: users error'
+                    });
+                }else{
+                    if(users[0].Role==2){
+                        res.send({
+                            success: true,
+                            message: 'good'
+                        })
+                    }else{
+                        res.send({
+                            success: false,
+                            message: 'Not admin'
+                        })
+                    }
+                }
+            })
+        }
+    });
+
 });
 
 module.exports = router;
