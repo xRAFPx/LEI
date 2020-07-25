@@ -1,0 +1,5 @@
+{
+    "env" : {
+        "ATLAS_URI" : "mongodb+srv://admin:<admin>@lei.7sinu.azure.mongodb.net/<dbname>?retryWrites=true&w=majority"
+    }
+}

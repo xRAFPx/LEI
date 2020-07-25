@@ -1,0 +1,14 @@
+[
+    {
+       "Key":1,
+       "Value":"baixa"
+    },
+    {
+       "Key":2,
+       "Value":"normal"
+    },
+    {
+       "Key":3,
+       "Value":"alta"
+    }
+]

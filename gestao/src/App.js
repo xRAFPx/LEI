@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import './App.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Service from "./data/service.json";
+import requestService from "./data/service.json";
 import requestType from "./data/requestType.json";
 import requestNature from "./data/requestNature.json";
 import requestPriority from "./data/requestPriority.json";
@@ -11,15 +11,29 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Media from 'react-bootstrap/Media';
 import Title from './components/Title';
 
-
 class FormPage extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      image: null
+      reqType:requestType[0].Value,
+      reqNature:requestNature[0].Value,
+      reqService:requestService[0].Value,
+      requester:'Administrador de Sistemas (288)',
+      requesterEmail:'something@email.com',
+      requesterNum:'123456789',
+      reqDescription:'',
+      reqScreenshot: "//:0",
+      reqPriority: requestPriority[1].Value
     };
+
     this.loadPicture = this.loadPicture.bind(this);
     this.closePicture = this.closePicture.bind(this);
+    this.fileInput = React.createRef();
+    this.handleRequestTypeChange = this.handleRequestTypeChange.bind(this);
+    this.handleRequestNatChange = this.handleRequestNatChange.bind(this);
+    this.handleRequestServChange = this.handleRequestServChange.bind(this);
+    this.handleRequestDescChange = this.handleRequestDescChange.bind(this);
+    this.handlePriorityChange = this.handlePriorityChange.bind(this);
   }
 
   loadPicture() {
@@ -32,6 +46,47 @@ class FormPage extends React.Component {
     document.getElementById("myModal").style.display = 'none';
   }
 
+  handleRequestTypeChange(event){
+    this.setState({reqType:event.target.value});
+  }
+
+  handleRequestNatChange(event){
+    this.setState({reqNature:event.target.value});
+  }
+
+  handleRequestServChange(event){
+    this.setState({reqService:event.target.value});
+  }
+
+  handleRequestDescChange(event){
+    this.setState({reqDescription:event.target.value});
+  }
+
+  handlePriorityChange(event){
+    this.setState({reqPriority:event.target.value});
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    alert(
+      `Selected file - ${this.fileInput.current.files[0].name}`
+    );
+    //SEND TO EMAIL
+    // var mailTo = '';
+    // var mailFrom = this.state.requesterEmail;
+
+    // window.location = '/';
+    this.props.history.push('/')
+  }
+
+  // componentDidMount() {
+  //   axios.get('http://localhost:3000/form')
+  //     .then(res => {
+  //       const screenshot = res.data;
+  //       this.setState({ reqScreenshot:screenshot });
+  //     })
+  // }
+
   render(){
     return (
     <div>
@@ -41,16 +96,16 @@ class FormPage extends React.Component {
       </div>
       <div className="App">
         <Title/>
-        <p>Novo Pedido</p>
+        <h5>Novo Pedido</h5>
       </div>
       <div className='container'>
-        <Form>
+        <Form onSubmit={this.handleSubmit}>
             <Form.Group as={Row} controlId="formRequestType">
               <Form.Label column sm="2">Tipo de pedido: </Form.Label>
               <Col sm="10">
-                <Form.Control as="select" defaultValue={requestType[0].Value} htmlSize={5} custom>
+                <Form.Control size="sm" as="select" value={this.state.reqType} onChange={this.handleRequestTypeChange} htmlSize={5} custom>
                 {requestType.map((e, key) => {
-                return <option key={key} value={e.Key}>{e.Value}</option>;
+                return <option key={key} value={e.Value}>{e.Value}</option>;
                   })}
               </Form.Control>
               </Col>
@@ -59,9 +114,9 @@ class FormPage extends React.Component {
             <Form.Group as={Row} controlId="formRequestNature">
               <Form.Label column sm="2">Natureza do pedido: </Form.Label>
               <Col sm="10">
-                <Form.Control as="select" defaultValue={requestNature[0].Value} htmlSize={5} custom>
+                <Form.Control size="sm" as="select" value={this.state.reqNature} onChange={this.handleRequestNatChange} htmlSize={5} custom>
                   {requestNature.map((e, key) => {
-                  return <option key={key} value={e.Key}>{e.Value}</option>;
+                  return <option key={key} value={e.Value}>{e.Value}</option>;
                     })}
               </Form.Control>
               </Col>
@@ -70,9 +125,9 @@ class FormPage extends React.Component {
             <Form.Group as={Row} controlId="formService">
               <Form.Label column sm="2">Serviço: </Form.Label>
               <Col sm="10">
-                <Form.Control as="select" defaultValue={Service[0].Value} htmlSize={5} custom>
-                {Service.map((e, key) => {
-                return <option key={key} value={e.Key}>{e.Value}</option>;
+                <Form.Control size="sm" as="select" value={this.state.reqService} onChange={this.handleRequestServChange} htmlSize={5} custom>
+                {requestService.map((e, key) => {
+                return <option key={key} value={e.Value}>{e.Value}</option>;
                   })}
               </Form.Control>
               </Col>
@@ -81,28 +136,31 @@ class FormPage extends React.Component {
             <Form.Group as={Row} controlId="formRequester">
               <Form.Label column sm="2">Requisitante: </Form.Label>
               <Col sm="10">
-                <Form.Control plaintext readOnly defaultValue={requestPriority[1].Value} />
+                <Form.Control size="sm" plaintext readOnly value={this.state.requester}/>
               </Col>
             </Form.Group>
 
             <Form.Group as={Row} controlId="formRequesterEmail">
               <Form.Label column sm="2">Email: </Form.Label>
               <Col sm="10">
-                <Form.Control plaintext readOnly defaultValue={requestPriority[1].Value} />
+                <Form.Control size="sm" plaintext readOnly value={this.state.requesterEmail} />
               </Col>
             </Form.Group>
 
             <Form.Group as={Row} controlId="formRequesterContact">
               <Form.Label column sm="2">Contacto: </Form.Label>
               <Col sm="10">
-                <Form.Control plaintext readOnly defaultValue={requestPriority[1].Value} />
+                <Form.Control size="sm" plaintext readOnly value={this.state.requesterNum} />
               </Col>
             </Form.Group>
 
             <Form.Group as={Row} controlId="formDescription">
               <Form.Label column sm="2">Descrição: </Form.Label>
               <Col sm="10">
-                <Form.Control as="textarea" rows="5" />
+                <Form.Control size="sm" as="textarea" rows="5" value={this.state.requestPriority} onChange={this.handlePriorityChange} required/>
+                <Form.Control.Feedback type="invalid">
+                  Por favor indique uma descrição do seu pedido.
+                </Form.Control.Feedback>
               </Col>
             </Form.Group>
 
@@ -110,7 +168,7 @@ class FormPage extends React.Component {
               <Form.Label column sm="2">Captura automática de ecrã: </Form.Label>
               <Col sm="10">
                 <Media as="li">
-                  <img id ='image' onClick={this.loadPicture} width={64} height={64} className="mr-3" src="http://placehold.it/64x64" alt="Screenshot" />
+                  <img id ='image' onClick={this.loadPicture} width={64} height={64} className="mr-3" src={this.state.reqScreenshot} alt="Screenshot" />
                 </Media>
               </Col>
             </Form.Group>
@@ -118,36 +176,30 @@ class FormPage extends React.Component {
             <Form.Group as={Row} controlId="formAttachments">
               <Form.Label column sm="2">Anexos: </Form.Label>
               <Col sm="10">
-                <Form.File id="exampleFormControlFile1"/>
+                <Form.File id="exampleFormControlFile1" ref={this.fileInput}/>
               </Col>
             </Form.Group>
 
             <Form.Group as={Row} controlId="formRequestPriority">
               <Form.Label column sm="2">Prioridade: </Form.Label>
               <Col sm="10">
-                <Form.Control as="select" defaultValue={requestPriority[1].Value}>
+                <Form.Control size="sm" as="select" value={this.state.reqPriority} onChange={this.handlePriorityChange}>
                   {requestPriority.map((e, key) => {
-                  return <option key={key} value={e.Key}>{e.Value}</option>;
+                  return <option key={key} value={e.Value}>{e.Value}</option>;
                     })}
                 </Form.Control>
               </Col>
             </Form.Group>
-
-            <button className = 'requestButton' variant="primary" type="submit">Confirmar</button>
-            {/* <Link
-            to={{
-              pathname: "/",
-              state: props.location.state
-            }}
-          > */}
-            <button className = 'requestButton' type="button" value="cancel">Cancelar</button>
-            {/* </Link> */}
+            <div className='containerButton'>
+              <button className = 'requestButton' variant="primary" type="submit">Confirmar</button>
+              <button className = 'requestButton' type="button" value="cancel">Cancelar</button>
+            </div>
+            
           </Form>
       </div>
     </div>   
   );
   }
-
 }
 
 export default FormPage;

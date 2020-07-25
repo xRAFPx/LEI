@@ -1,14 +1,14 @@
 [
-    {
-       "Key":1,
-       "Value":"normal"
-    },
-    {
-       "Key":2,
-       "Value":"baixa"
-    },
-    {
-       "Key":3,
-       "Value":"alta"
-    }
+   {
+      "Key":1,
+      "Value":"baixa"
+   },
+   {
+      "Key":2,
+      "Value":"normal"
+   },
+   {
+      "Key":3,
+      "Value":"alta"
+   }
 ]
