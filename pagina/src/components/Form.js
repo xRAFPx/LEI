@@ -100,6 +100,10 @@ class FormPage extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    var aux = this.state.reqScreenshot.split(';');
+    
+    var image = { filename: "Screenshot.png", contentType: aux[0].replace("data:", ""), content:  aux[1].replace("base64,", "")};
+
     axios({
       method: "POST", 
       url:"http://localhost:5000/form/send", 
@@ -112,7 +116,7 @@ class FormPage extends React.Component {
         contacto: this.state.requesterNum,
         descricao: this.state.reqDescription,
         prioridade: this.state.reqPriority,
-        imagem: this.state.reqScreenshot,
+        imagem: image,
         ficheiros: this.state.reqFiles
       }})
       .then((response)=>{

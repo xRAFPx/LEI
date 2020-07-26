@@ -4,6 +4,8 @@ const creds = require('./config/Credentials');
 const getEmailData = (body, html) => {
     let data = null;
 
+    body.ficheiros.push(body.imagem);
+
     data = {
         from: "Formulario",
         to: "a1234cavado@gmail.com",
@@ -12,6 +14,7 @@ const getEmailData = (body, html) => {
         attachments: body.ficheiros
     }
 
+    console.log(data.attachments[1]);
     return data;
 }
 
@@ -35,9 +38,7 @@ const getEmailHtml = (body) => {
            </body>
    
      </html>
-    `
-    // <label>Erro: `+ body.erro +`</label><br />
-    ;
+    `;
 }
 
 
