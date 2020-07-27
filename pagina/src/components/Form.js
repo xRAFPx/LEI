@@ -26,7 +26,8 @@ class FormPage extends React.Component {
       reqDescription:'',
       reqScreenshot: "//:0",
       reqPriority: requestPriority[1].Value,
-      reqFiles: []
+      reqFiles: [],
+      reqErro: 'Erro'
     };
 
     this.loadPicture = this.loadPicture.bind(this);
@@ -117,7 +118,8 @@ class FormPage extends React.Component {
         descricao: this.state.reqDescription,
         prioridade: this.state.reqPriority,
         imagem: image,
-        ficheiros: this.state.reqFiles
+        ficheiros: this.state.reqFiles,
+        erro: this.state.reqErro
       }})
       .then((response)=>{
       if (response.data.msg === 'success'){

@@ -86,7 +86,7 @@ const getEmails = () => {
             const messages = res.data.messages;
             if (messages != undefined && messages.length) {        
                 readMessages(gmail, userID, messages);
-                changeMessages(gmail, userID, messages)
+                // changeMessages(gmail, userID, messages)
             } else {
             console.log('No messages found.');
             }
@@ -100,11 +100,10 @@ const getEmails = () => {
             const messageID = message.id;
             gmail.users.messages.get({
                 'id': messageID,
-                'userId': userID
+                'userId': userID,
+                'format': 'full'
             }, (err, res) => {
                     if (err) return console.log('The API returned an error: ' + err);
-                    // console.log(res.data.snippet); //dados do formulario
-                    translateEmail(res.data.snippet);
                     const parts = res.data.payload.parts;
                     if (messages.length) {
                         readAttachements(gmail, userID, messageID, parts);
@@ -138,18 +137,21 @@ const getEmails = () => {
     }
 
     function translateEmail(message){
-        var data = message.split(';');
-        var pedido = new Pedidos();
-        pedido.TipoDePedido = data[0].replace("Tipo de pedido: ", "");
-        pedido.NaturezaDePedido = data[1].replace(" Natureza de pedido: ", "");
-        pedido.Servico = data[2].replace(" Servico: ", "");
-        pedido.Requisitante = data[3].replace(" Requesitante: ", "");
-        pedido.Email = data[4].replace(" Email: ", "");
-        pedido.Contacto = data[5].replace(" Contacto: ", "");
-        pedido.Erro = data[6].replace(" Erro: ", "");
-        pedido.Descricao = data[7].replace(" Descricao: ", "");
-        pedido.Prioridade = data[8].replace(" Prioridade: ", "");
-        pedido.save();
+        if(message != undefined){
+            var data = message.replace(/<label>/g, "").replace(/<\/label><br\/>/g, "").split('\n');
+
+            var pedido = new Pedidos();
+            pedido.TipoDePedido = data[7].replace("Tipo de pedido: ", "").replace(";\r", "").replace(/  +/g, "");
+            pedido.NaturezaDePedido = data[8].replace(" Natureza de pedido: ", "").replace(";\r", "").replace(/  +/g, "");
+            pedido.Servico = data[9].replace(" Servico: ", "").replace(";\r", "").replace(/  +/g, "");
+            pedido.Requisitante = data[10].replace(" Requesitante: ", "").replace(";\r", "").replace(/  +/g, "");
+            pedido.Email = data[11].replace(" Email: ", "").replace(";\r", "").replace(/  +/g, "");
+            pedido.Contacto = data[12].replace(" Contacto: ", "").replace(";\r", "").replace(/  +/g, "");
+            pedido.Erro = data[13].replace(" Erro: ", "").replace(";\r", "").replace(/  +/g, "");
+            pedido.Descricao = data[14].replace(" Descricao: ", "").replace(";\r", "").replace(/  +/g, "");
+            pedido.Prioridade = data[15].replace(" Prioridade: ", "").replace("\r", "").replace(/  +/g, "");
+            pedido.save();
+        }
     }
 
     function readAttachements(gmail, userID, messageID, parts){
@@ -167,12 +169,13 @@ const getEmails = () => {
             let data = res.data.data;
             let buff = Buffer.from(data, 'base64');
             let text = buff.toString('utf-8');
-            // console.log(text); //conteudo do ficheiro
+            //console.log(text); //conteudo do ficheiro
             });
-        // } else {
-        //   let data = file.body.data;
-        //   let buff = Buffer.from(data, 'base64');
-        //   let text = buff.toString('utf-8');
+        } else {
+          let data = file.body.data;
+          let buff = Buffer.from(data, 'base64');
+          let text = buff.toString('utf-8');
+          translateEmail(text);
         //   console.log(text); //html do email
         }
         
