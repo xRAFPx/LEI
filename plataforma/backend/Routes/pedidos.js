@@ -10,7 +10,8 @@ const NaturezaDePedido = require('../Models/userNaturazaDePedido.model')
 router.route('/clientpedidos/:id').get((req,res)=>{
     const userId = req.params.id
     Pedidos.find({
-        User: userId
+        User: userId,
+        isExecuted: false
     }).populate({path:'Servico',select:'Name -_id'}).populate({path:'NaturezaDePedido',select:'Name -_id'}).populate({path:'Prioridade',select:'Name -_id'}).populate({path:'TipoDePedido',select:'Name -_id'})
         .then(pedidos =>{
             res.json(pedidos)
@@ -194,13 +195,6 @@ router.route('/servico/:id').get((req,res)=>{
     })
 })
 
-router.route('/teste/:id').get((req,res) => {
-    Pedidos.findOne({_id:req.params.id}).populate('Servico').populate('NaturezaDePedido')
-        .then(pedido =>{
-            return res.send(pedido.NaturezaDePedido.Name)
-        })
-})
-
 router.route('/').get((req,res) => {
     Pedidos.find({
         User:null
@@ -208,5 +202,43 @@ router.route('/').get((req,res) => {
         .then(pedidos =>{
             res.json(pedidos)
         })
+})
+
+router.route('/executar').post((req,res) => {
+    Pedidos.findByIdAndUpdate({
+        _id: req.body.id
+    },{
+        $set:{isExecuted:true}
+    }, null,(err)=>{
+        if(err){
+            return res.send({
+                success: false,
+                message: "Error: Server error"
+            })
+        }else{
+            return res.send({
+                success: true,
+                message: "Good"
+            })
+        }
+    })
+})
+
+router.route('/delete').post((req,res)=>{
+    Pedidos.findByIdAndDelete({
+        _id: req.body.id
+    },null,(err)=>{
+        if(err){
+            return res.send({
+                success: false,
+                message: "Error: Server Error"
+            })
+        }else{
+            return res.send({
+                success: true,
+                message: "Good"
+            })
+        }
+    })
 })
 module.exports = router;

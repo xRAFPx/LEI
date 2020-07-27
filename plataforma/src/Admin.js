@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { getFromStorage } from './Store/UserStore';
 import axios from 'axios';
-import {Modal} from 'react-bootstrap'
+import {Modal, Alert} from 'react-bootstrap'
 
 export default class Admin extends Component {
   constructor(props){
@@ -17,12 +17,17 @@ export default class Admin extends Component {
     this.handleCloseDelete = this.handleCloseDelete.bind(this);
     this.handleshowDelete = this.handleshowDelete.bind(this);
     this.deleteCliente = this.deleteCliente.bind(this);
+    this.prepateTable = this.prepateTable.bind(this);
+    this.handleCloseAlert = this.handleCloseAlert.bind(this);
 
     this.state = {
       id: '',
       Name: '',
       Email: '',
       Role: '',
+      AlertMessage: '',
+      MessageState: '',
+      AlertShow : false,
       isLoading: true,
       token: '',
       users: [],
@@ -39,9 +44,19 @@ export default class Admin extends Component {
       .then(res =>{
         if(res.data.success){
           this.setState({
-            showDelete: false
+            showDelete: false,
+            AlertShow: true,
+            AlertMessage: "Utilizador eliminado com sucesso",
+            MessageState: "success"
           })
-          window.location.reload(false);
+          this.prepateTable()
+        }else{
+          this.setState({
+            showDelete: false,
+            AlertShow: true,
+            AlertMessage: "Erro ao eliminar o cliente",
+            MessageState: "danger"
+          })
         }
       })
     
@@ -88,6 +103,11 @@ export default class Admin extends Component {
       Role: e.target.value
     });
   }
+  handleCloseAlert(){
+    this.setState({
+      AlertShow: false
+    })
+  }
   onSubmit(e){
     e.preventDefault();
 
@@ -101,17 +121,35 @@ export default class Admin extends Component {
       .then(res =>{
         if(res.data.success){
           this.setState({
-            show:false
+            show:false,
+            AlertShow: true,
+            AlertMessage: "Utilizador editado com sucesso",
+            MessageState: "success"
           })
-          window.location.reload(false);
+          this.prepateTable()
+        }else{
+          this.setState({
+            show:false,
+            AlertShow: true,
+            AlertMessage: "Erro ao editar utilizador",
+            MessageState: "danger"
+          })
         }
       })
   }
-  componentWillMount(){
+  prepateTable(){
+      axios.get('http://localhost:5000/users/')
+      .then(res =>{
+        this.setState({
+          users: res.data
+        })
+      })
+  }
+  async componentWillMount(){
     const obj = getFromStorage('the_main_app');
     if(obj && obj.token){
       const { token } = obj;
-      axios.get('http://localhost:5000/account/verifyAdmin?token='+ token)
+    await axios.get('http://localhost:5000/account/verifyAdmin?token='+ token)
         .then(res => {
           if(res.data.success){
             this.setState({
@@ -131,12 +169,7 @@ export default class Admin extends Component {
       });
       window.location = '/login'
     }
-    axios.get('http://localhost:5000/users/')
-      .then(res =>{
-        this.setState({
-          users: res.data
-        })
-      })
+    this.prepateTable()
   }
   renderTableData(){
     let Role = "";
@@ -214,6 +247,15 @@ export default class Admin extends Component {
               <button style={{marginRight: 10}} onClick={this.handleCloseDelete} type="button" class="btn btn-secondary">Cancel</button>
               <button onClick={this.deleteCliente} type="button" class="btn btn-danger">Delete</button>
           </div>
+        </Modal.Body>
+      </Modal>
+      <Modal show={this.state.AlertShow} onHide={this.handleCloseAlert}>
+        <Modal.Body>
+          <Alert variant={this.state.MessageState}>
+           <p>
+              {this.state.AlertMessage}
+           </p>
+          </Alert>
         </Modal.Body>
       </Modal>
     </div>

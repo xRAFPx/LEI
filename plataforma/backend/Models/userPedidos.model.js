@@ -39,6 +39,10 @@ const pedidosSchema = new Schema({
         ref: 'User',
         default: null
     },
+    isExecuted:{
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true,
 });

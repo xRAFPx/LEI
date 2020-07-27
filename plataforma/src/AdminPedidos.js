@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { getFromStorage } from './Store/UserStore';
 import axios from 'axios';
-import {Modal, Row, Col} from 'react-bootstrap';
+import {Modal, Row, Col, Alert} from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
 export default class AdminPedidos extends Component{
@@ -14,6 +14,10 @@ export default class AdminPedidos extends Component{
     this.renderTableData = this.renderTableData.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeName = this.onChangeName.bind(this);
+    this.handleCloseAlert = this.handleCloseAlert.bind(this);
+    this.prepareTable = this.prepareTable.bind(this);
+    this.handleCloseDelete = this.handleCloseDelete.bind(this);
+    this.deletePedido = this.deletePedido.bind(this);
 
     this.state = {
       show : false,
@@ -21,6 +25,10 @@ export default class AdminPedidos extends Component{
       userid : "",
       pedidos: [],
       pedidoid: "",
+      AlertShow: false,
+      MessageState: '',
+      AlertMessage: '',
+      showDelete: false,
       users: []
     }
 
@@ -36,11 +44,11 @@ export default class AdminPedidos extends Component{
       show: false
     })
   }
-  componentWillMount(){
+ async componentWillMount(){
     const obj = getFromStorage('the_main_app');
     if(obj && obj.token){
       const { token } = obj;
-      axios.get('http://localhost:5000/account/verify?token='+ token)
+      await axios.get('http://localhost:5000/account/verify?token='+ token)
         .then(res => {
           if(res.data.success){
             this.setState({
@@ -48,12 +56,7 @@ export default class AdminPedidos extends Component{
               isLoading: false,
               userid: res.data.userId
             });
-            axios.get('http://localhost:5000/pedidos/')
-            .then(res =>{
-              this.setState({
-                pedidos: res.data
-              })
-            })
+            this.prepareTable()
             axios.get('http://localhost:5000/users/userpedidos')
             .then(res =>{
               this.setState({
@@ -79,7 +82,7 @@ export default class AdminPedidos extends Component{
     this.setState({
         Name:e.target.value
     })
-  }
+  } 
   onSubmit(e){
     e.preventDefault();
     const send = {
@@ -91,12 +94,71 @@ export default class AdminPedidos extends Component{
         .then(res =>{
             if(res.data.success){
                 this.setState({
-                    show: false
+                    show: false,
+                    AlertShow: true,
+                    AlertMessage: "Utilizador associado com sucesso",
+                    MessageState: "success"
                 })
-                window.location.reload(false);
+                this.prepareTable()
+            }else{
+              this.setState({
+                show: false,
+                AlertShow: true,
+                AlertMessage: "Erro ao associar o cliente",
+                MessageState: "danger"
+              })
             }
         })
     
+  }
+  handleCloseAlert(){
+    this.setState({
+      AlertShow: false
+    })
+  }
+  handleCloseDelete(){
+    this.setState({
+      showDelete: false
+    })
+  }
+  handleShowDelete(pedido){
+    this.setState({
+      showDelete: true,
+      pedidoid: pedido._id
+    })
+  }
+  deletePedido(){
+    const pedido ={
+      id: this.state.pedidoid
+    }
+    axios.post(' http://localhost:5000/pedidos/delete',pedido)
+      .then(res =>{
+        if(res.data.success){
+          this.setState({
+            showDelete: false,
+            AlertShow: true,
+            AlertMessage: "Pedido eliminado com sucesso",
+            MessageState: "success"
+          });
+          this.prepareTable()
+        }else{
+          this.setState({
+            showDelete: false,
+            AlertShow: true,
+            AlertMessage: "Erro ao eliminar pedido",
+            MessageState: "danger"
+          });
+          this.prepareTable()
+        }
+      })
+  }
+  prepareTable(){
+    axios.get('http://localhost:5000/pedidos/')
+            .then(res =>{
+              this.setState({
+                pedidos: res.data
+              })
+            })
   }
   renderTableData(){
     return this.state.pedidos.map((pedido, index)=>{
@@ -115,7 +177,7 @@ export default class AdminPedidos extends Component{
                 <td>{pedido.Servico.Name}</td>
                 <td>{pedido.TipoDePedido.Name}</td>
                 <td>{pedido.Prioridade.Name}</td>
-                <td><button type="button" className="btn btn-warning" onClick={() =>this.handleShow(pedido)} style={{marginRight: 10 }}>Associar</button><button ype="button" className="btn btn-danger">Delete</button></td>
+                <td><button type="button" className="btn btn-warning" onClick={() =>this.handleShow(pedido)} style={{marginRight: 10 }}>Associar</button><button  onClick={() =>this.handleShowDelete(pedido)}ype="button" className="btn btn-danger">Delete</button></td>
               </tr>
             )
           }
@@ -167,6 +229,26 @@ export default class AdminPedidos extends Component{
                  </div>
             </Form>
         </div>
+        </Modal.Body>
+      </Modal>
+      <Modal show={this.state.showDelete} onHide={this.handleCloseDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Eliminar Pedido?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="Content">
+              <button style={{marginRight: 10}} onClick={this.handleCloseDelete} type="button" class="btn btn-secondary">Cancel</button>
+              <button onClick={this.deletePedido} type="button" class="btn btn-danger">Delete</button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal show={this.state.AlertShow} onHide={this.handleCloseAlert}>
+        <Modal.Body>
+          <Alert variant={this.state.MessageState}>
+           <p>
+              {this.state.AlertMessage}
+           </p>
+          </Alert>
         </Modal.Body>
       </Modal>
       </div>
