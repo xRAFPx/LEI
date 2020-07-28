@@ -59,10 +59,12 @@ export default class Nav extends Component{
               .then(res=>{
                 if(res.data.success){
                   document.getElementById("AdminNav").style.display = "block";
+                  document.getElementById("EstatisticasNav").style.display = "block";
                   document.getElementById("Pedidos").style.display = "none";
                   document.getElementById("AdminNavClientes").style.display = "block";
                 }else{
                   document.getElementById("AdminNav").style.display = "none";
+                  document.getElementById("EstatisticasNav").style.display = "none";
                   document.getElementById("Pedidos").style.display = "block";
                   document.getElementById("AdminNavClientes").style.display = "none";
                 }
@@ -74,6 +76,7 @@ export default class Nav extends Component{
               isLoading: false,
             });
             document.getElementById("AdminNav").style.display = "none";
+            document.getElementById("EstatisticasNav").style.display = "none";
             document.getElementById("Pedidos").style.display = "block";
             document.getElementById("logoutNav").style.display = "none";
             document.getElementById("AdminNavClientes").style.display = "none";
@@ -84,6 +87,7 @@ export default class Nav extends Component{
         isLoading: false,
       });
       document.getElementById("AdminNav").style.display = "none";
+      document.getElementById("EstatisticasNav").style.display = "none";
       document.getElementById("loginNav").style.display = "block";
       document.getElementById("logoutNav").style.display = "none";
       document.getElementById("Pedidos").style.display = "block";
@@ -106,8 +110,8 @@ export default class Nav extends Component{
             <Link id="Pedidos" style={{color: 'white'}} to='/Pedidos'>
             <li>Pedidos</li>
             </Link>
-            <Link style={{color: 'white'}} to='/Historico'>
-            <li>Historico</li>
+            <Link id="EstatisticasNav" style={{color: 'white'}} to='/Estatisticas'>
+            <li>Estatisticas</li>
             </Link>
             <Link id="loginNav" style={{color: 'white'}} to='/Login'>
             <li>Login/SignUp</li>

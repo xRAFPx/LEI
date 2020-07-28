@@ -89,6 +89,7 @@ router.route('/add').post((req,res)=>{
             })
         }
         if(tipodepedidos.length != 1){
+            console.log(req.body)
             res.send({
                 success:false,
                 message:"Error: tipo de pedido invalido"

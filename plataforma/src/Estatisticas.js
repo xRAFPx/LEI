@@ -4,12 +4,12 @@ import { getFromStorage } from './Store/UserStore';
 import axios from 'axios';
 import {CanvasJSChart} from 'canvasjs-react-charts';
 
-export default class Nav extends Component{
-  componentDidMount(){
+export default class Estatisticas extends Component{
+  async componentWillMount(){
     const obj = getFromStorage('the_main_app');
     if(obj && obj.token){
       const { token } = obj;
-      axios.get('http://localhost:5000/account/verify?token='+ token)
+    await axios.get('http://localhost:5000/account/verifyAdmin?token='+ token)
         .then(res => {
           if(res.data.success){
             this.setState({
@@ -61,7 +61,7 @@ export default class Nav extends Component{
 		}
   return (
       <div className="App">
-        <h1>Historico</h1>
+        <h1>Estatisticas</h1>
         <div>
           <CanvasJSChart options= {options}/>
         </div>
