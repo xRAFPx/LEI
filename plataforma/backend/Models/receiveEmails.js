@@ -153,9 +153,6 @@ const getEmails = () => {
                 Prioridade : data[15].replace(" Prioridade: ", "").replace("\r", "").replace(/  +/g, "")
             }
             await axios.post('http://localhost:5000/pedidos/add', pedido)
-                .then(res=>{
-                   console.log(res.data)
-                })
         }
     }
 
