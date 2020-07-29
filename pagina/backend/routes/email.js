@@ -70,16 +70,19 @@ router.post('/send', (req, res, next) => {
 
 
   smtpTransport.sendMail(data, function(error, response) {
-    if(error) {
+    if(error) 
+    {
         console.log(error)
-        return res.send({message: 'fail'})
-    } else {
-        console.log( "email sent successfully")
-        return res.send({message: 'success'})
+        res.send({message: 'fail'})
+    } 
+      else 
+    {
+        console.log( "Email sent successfully")
+        res.send({message: 'success'})
     }
-    smtpTransport.close();
+    // smtpTransport.close();
 })
-    
+  
 })
 
 

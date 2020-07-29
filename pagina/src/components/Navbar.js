@@ -1,5 +1,5 @@
 import React from 'react';
-import '../App.css';
+import './Navbar.css';
 import PopupComponent from './Popup';
 
 class NavbarComponent extends React.Component{

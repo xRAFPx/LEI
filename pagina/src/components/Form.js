@@ -7,7 +7,6 @@ import requestService from "../data/service.json";
 import requestType from "../data/requestType.json";
 import requestNature from "../data/requestNature.json";
 import requestPriority from "../data/requestPriority.json";
-// import Media from 'react-bootstrap/Media';
 import Title from './Title';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -41,6 +40,7 @@ class FormPage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.createScreenshotStructure = this.createScreenshotStructure.bind(this);
   }
 
   loadPicture() {
@@ -89,16 +89,15 @@ class FormPage extends React.Component {
       temporaryFileReader.onload = () => {
         resolve(temporaryFileReader.result);
       };
-      temporaryFileReader.readAsText(inputFile);
+      temporaryFileReader.readAsBinaryString(inputFile);
     });
   };
 
   handleClick(event){
     event.preventDefault();
     var filesList = [];
-
     Array.from(event.target.files).forEach(async f => {
-        filesList.push({ filename: f.name, contentType: f.type, content: await this.readUploadedFileAsText(f)})
+        filesList.push({ filename: f.name, contentType: f.type, encoding: 'binary', content: await this.readUploadedFileAsText(f)})
     });
 
     this.setState({reqFiles:filesList})      
@@ -109,8 +108,7 @@ class FormPage extends React.Component {
     let image = null;
     if (this.state.reqScreenshot != null)
     {
-      var aux = this.state.reqScreenshot.split(';');
-      image = { filename: "Screenshot.png", contentType: aux[0].replace("data:", ""), content:  aux[1].replace("base64,", ""), encoding: 'base64'};
+      image = { filename: "Screenshot.png", path:this.state.reqScreenshot};
     }
 
     axios({
@@ -131,6 +129,7 @@ class FormPage extends React.Component {
       }})
       .then((response)=>{
       if (response.data.message === 'success'){
+        console.log(this.state.reqFiles)
           alert('Pedido de Intervenção enviado'); 
           window.history.back();
       }else if(response.data.message === 'fail'){
@@ -143,23 +142,52 @@ class FormPage extends React.Component {
     window.history.back();
   }
 
+  createScreenshotStructure()
+  {
+    var x = document.getElementById("screenshotSpot");
+    x.innerText = 'Captura automática de ecrã: '
+    x.className= "form-label col-form-label col-sm-2"
+
+    var form = document.getElementById("formScreenshot")
+    var col = document.createElement("div")
+    col.className = 'col-sm-10'
+
+    var node = document.createElement("img");  
+    node.src = this.props.location.state.screenshot;
+
+    node.onclick = this.loadPicture
+    node.className = 'mr-3';
+    node.alt = "Screenshot";
+    node.height = 240;
+    node.id = 'image';
+
+    col.appendChild(node)
+    form.appendChild(col)
+  }
+
   componentDidMount() {
+    if (this.props.location.state.screenshot !== null)
+    {
+      this.createScreenshotStructure()
+    }
     this.setState({reqScreenshot: this.props.location.state.screenshot});
   }
 
-  render(){
+  render( ){
+
     return (
-<div>
-      <div id = "myModal" className = "modal">
-        <span className="close" onClick={this.closePicture}>&times;</span>
-        <img className="modal-content" id="img" alt='open'/>
-      </div>
-      <div className="App">
-        <Title/>
-        <h5>Novo Pedido</h5>
-      </div>
-      <div className='container'>
-      <Form onSubmit={this.handleSubmit}>
+      <div>
+          <div id = "myModal" className = "modal">
+            <span className="closeB" onClick={this.closePicture}>&times;</span>
+            <img className="modalContent" id="img" alt='open'/>
+          </div>
+        
+        <div className="App">
+          <Title/>
+          <h5>Novo Pedido</h5>
+        </div>
+        <div className='container'>
+          <Form onSubmit={this.handleSubmit}>
             <Form.Group as={Row} controlId="formRequestType">
               <Form.Label column sm="2">Tipo de pedido: </Form.Label>
               <Col sm="10">
@@ -228,19 +256,14 @@ class FormPage extends React.Component {
               </Col>
             </Form.Group>
 
-            <Form.Group as={Row} controlId="formScreenshot">
-              <Form.Label column sm="2">Captura automática de ecrã: </Form.Label>
-              <Col sm="10">
-                {/* <Media as="li"> */}
-                  <img id ='image' onClick={this.loadPicture} height={240} className="mr-3" src={this.state.reqScreenshot} alt="Screenshot" />
-                {/* </Media> */}
-              </Col>
+              <Form.Group as={Row} controlId="formScreenshot" id='formScreenshot'>
+              <Form.Label id='screenshotSpot'column sm="2"></Form.Label>
             </Form.Group>
-                            
+                  
             <Form.Group as={Row} controlId="formAttachments">
               <Form.Label column sm="2">Anexos: </Form.Label>
               <Col sm="10">
-              <Form.File id="formControlFile" type="file" className="input-file" multiple onChange={this.handleClick}/>
+                <input id="formControlFile" type="file" multiple onChange={this.handleClick}/>
               </Col>
             </Form.Group>
 
@@ -254,14 +277,14 @@ class FormPage extends React.Component {
                 </Form.Control>
               </Col>
             </Form.Group>
-            <div className='containerButton'>
-              <button className = 'requestButton' variant="primary" type="submit">Confirmar</button>
-              <button className = 'requestButton' type="button" value="cancel" onClick={this.handleCancel}>Cancelar</button>
+            <div className='containerFormButton'>
+              <button className = 'requestFormButton' variant="primary" type="submit">Confirmar</button>
+              <button className = 'requestFormButton' type="button" value="cancel" onClick={this.handleCancel}>Cancelar</button>
             </div>
           </Form>
-      </div>
-    </div>   
-  );
+        </div>
+      </div>   
+    );
   }
 }
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import '../App.css';
+import './Title.css';
 import headerImage from "../data/chp.png";
 
 function Title() {
   return (
-    <div className="Title">
+    <div className="title">
       <div className="top-left">
         <img className='headerImage' src={headerImage} alt="Centro Hospital do Porto"/>
       </div>

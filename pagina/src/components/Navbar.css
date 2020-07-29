@@ -1,0 +1,14 @@
+.navbar span{
+    color:#000000;
+    font-size: 20px;
+  }
+  
+  .navbar{
+    background-color:#e1f5ff;
+    margin-bottom: 25px;
+  }
+  
+  .right{
+    position:absolute;
+    right:0;
+  }

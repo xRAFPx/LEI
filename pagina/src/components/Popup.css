@@ -1,0 +1,102 @@
+.modalS {
+    background: #ffffff;
+    font-size: 12px;
+    font-family: Arial;
+  }
+  .modalS > .popupHeader {
+    width: 100%;
+    border-bottom: 1px solid gray;
+    font-size: 18px;
+    text-align: center;
+    padding: 5px;
+    background-color: #0089CC;
+    color: #FFF;
+    font-family: verdana;
+  }
+
+  .modalS > .popupContent {
+    width: 100%;
+    padding: 10px 5px;
+    cursor: pointer;
+    border-left: solid 1px #f2f2f2;
+    border-right: solid 1px #f2f2f2;
+    border-bottom: solid 1px #f2f2f2;
+    border-radius: 0 0 5px 5px;
+    padding: 15px;
+    font-family: verdana;
+    font-size: 14px;
+  }
+  .modalS > .actions {
+    width: 100%;
+    padding: 10px 5px;
+    margin: auto;
+    text-align: center;
+  }
+  .modalS > .closeS {
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    padding: 2px 5px;
+    line-height: 20px;
+    right: -10px;
+    top: -10px;
+    font-size: 24px;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
+    font-weight: bold;
+  }
+  
+  .modalS > .closeS:hover,
+  .modalS > .closeS:focus {
+    color: red;
+    cursor: pointer;
+  }
+
+  .popupButton {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #000000;
+    cursor: pointer;
+    padding: 0 30px;
+    display: inline-block;
+    margin: 10px 15px;
+    line-height: 2em;
+    letter-spacing: 1.5px;
+    font-size: 1em;
+    outline: none;
+    position: relative;
+    font-size: 14px;
+    border: 3px solid #cfcece;
+    background-color: #ffffff;
+    border-radius: 15px 15px 15px 15px;
+  }
+  
+  .popupButton:hover,
+  .popupButton:focus {
+    border: 3px solid #005295;
+  }
+
+
+  .requestButton.btn{
+    font-family: Arial, Helvetica, sans-serif;
+    color: #000000;
+    cursor: pointer;
+    padding: 0 30px;
+    display: inline-block;
+    margin: 10px 15px;
+    line-height: 2em;
+    letter-spacing: 1.5px;
+    font-size: 1em;
+    outline: none;
+    position: relative;
+    font-size: 14px;
+    background-color: #e1f5ff;
+  }
+  
+  
+  .requestButton.btn:hover,
+  .requestButton.btn:focus,
+  .requestButton.btn:active {
+    border: 3px solid #005295;
+    box-shadow:none;
+  }

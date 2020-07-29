@@ -1,4 +1,5 @@
 import React from 'react';
+import './Collapsible.css';
 
 class Collapsible extends React.Component {
     constructor(props){
@@ -11,10 +12,6 @@ class Collapsible extends React.Component {
 
     togglePanel(e){
         this.setState({open: !this.state.open})
-    }
-
-    componentDidUpdate(){
-        
     }
 
     render() {

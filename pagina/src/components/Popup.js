@@ -1,9 +1,9 @@
 import React from 'react';
-import '../App.css';
+import './Popup.css';
 import Popup from "reactjs-popup";
 import html2canvas from 'html2canvas';
 
-class ControlledPopup extends React.Component {
+class PopupComponent extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -40,7 +40,6 @@ class ControlledPopup extends React.Component {
     async getScreenshotHandler(){
       this.closeModal();
       const canvas = await html2canvas(document.body, {useCORS: true})
-      console.log(canvas.toDataURL())
       this.setState({image: canvas.toDataURL()})
       const screenshot = {
         screenshot: this.state.image
@@ -54,40 +53,40 @@ class ControlledPopup extends React.Component {
     render() {
       return (
         <div>
-           <button className="requestButton btn btn-outline-success" onClick={this.openModal}>
+          <button className="requestButton btn" onClick={this.openModal}>
           Pedido de intervenção
-      </button>
-      <div data-html2canvas-ignore="true">
-        <Popup
-          open={this.state.open}
-          closeOnDocumentClick
-          onClose={this.closeModal}
-      >
-          <div className="modalS">
-              <span className="closeS" onClick={this.closeModal} title="Fechar">
-              &times;
-              </span>
-              <div className="header"> Screenshot do pedido de intervenção </div>
-              <div className="content">
-              {" "}
-              No caso do seu erro se encontrar no ecrã, selecione a opção "Sim" e poderá fazer um screenshot ao ecrã. Será posteriormente reencaminhado para o formulário para melhor identificação do erro. 
-              <br />
-              Senão clique na opção "Não" e será reencaminhado para o formulário onde poderá explicar o erro que encontra.
+          </button>
+          <div data-html2canvas-ignore="true">
+            <Popup
+              open={this.state.open}
+              closeOnDocumentClick
+              onClose={this.closeModal}
+            >
+              <div className="modalS">
+                  <span className="closeS" onClick={this.closeModal} title="Fechar">
+                    &times;
+                  </span>
+                  <div className="popupHeader"> Screenshot do pedido de intervenção </div>
+                  <div className="popupContent">
+                    {" "}
+                    No caso do seu erro se encontrar no ecrã, selecione a opção "Sim" e poderá fazer um screenshot ao ecrã. Será posteriormente reencaminhado para o formulário para melhor identificação do erro. 
+                    <br />
+                    Senão clique na opção "Não" e será reencaminhado para o formulário onde poderá explicar o erro que encontra.
+                  </div>
+                  <div className="actions">  
+                      <button className="popupButton" onClick={this.getScreenshotHandler}>
+                          Sim
+                      </button>
+                      <button className="popupButton" onClick={this.getNoScreenshotHandler}>
+                          Não
+                      </button>
+                  </div>
               </div>
-              <div className="actions">  
-                  <button className="popupButton" onClick={this.getScreenshotHandler}>
-                      Sim
-                  </button>
-                  <button className="popupButton" onClick={this.getNoScreenshotHandler}>
-                      Não
-                  </button>
-              </div>
+            </Popup>
           </div>
-      </Popup>
-        </div>
         </div>
       );
     }
   }
   
-export default ControlledPopup;
+export default PopupComponent;
