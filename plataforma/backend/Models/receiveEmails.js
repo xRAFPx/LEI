@@ -141,17 +141,18 @@ const getEmails = () => {
         if(message != undefined){
             var data = message.replace(/<label>/g, "").replace(/<\/label><br\/>/g, "").split('\n');
 
-            var pedido = new Pedidos();
-            pedido.TipoDePedido = data[7].replace("Tipo de pedido: ", "").replace(";\r", "").replace(/  +/g, "");
-            pedido.NaturezaDePedido = data[8].replace(" Natureza de pedido: ", "").replace(";\r", "").replace(/  +/g, "");
-            pedido.Servico = data[9].replace(" Servico: ", "").replace(";\r", "").replace(/  +/g, "");
-            pedido.Requisitante = data[10].replace(" Requesitante: ", "").replace(";\r", "").replace(/  +/g, "");
-            pedido.Email = data[11].replace(" Email: ", "").replace(";\r", "").replace(/  +/g, "");
-            pedido.Contacto = data[12].replace(" Contacto: ", "").replace(";\r", "").replace(/  +/g, "");
-            pedido.Erro = data[13].replace(" Erro: ", "").replace(";\r", "").replace(/  +/g, "");
-            pedido.Descricao = data[14].replace(" Descricao: ", "").replace(";\r", "").replace(/  +/g, "");
-            pedido.Prioridade = data[15].replace(" Prioridade: ", "").replace("\r", "").replace(/  +/g, "");
-            await axios.post('http://localhost:5000/api/receiveEmail', pedido)
+            var pedido = {
+                TipoDePedido : data[7].replace("Tipo de pedido: ", "").replace(";\r", "").replace(/  +/g, ""),
+                NaturezaDePedido : data[8].replace(" Natureza de pedido: ", "").replace(";\r", "").replace(/  +/g, ""),
+                Servico : data[9].replace(" Servico: ", "").replace(";\r", "").replace(/  +/g, ""),
+                Requisitante : data[10].replace(" Requesitante: ", "").replace(";\r", "").replace(/  +/g, ""),
+                Email : data[11].replace(" Email: ", "").replace(";\r", "").replace(/  +/g, ""),
+                Contacto : data[12].replace(" Contacto: ", "").replace(";\r", "").replace(/  +/g, ""),
+                Erro : data[13].replace(" Erro: ", "").replace(";\r", "").replace(/  +/g, ""),
+                Descricao : data[14].replace(" Descricao: ", "").replace(";\r", "").replace(/  +/g, ""),
+                Prioridade : data[15].replace(" Prioridade: ", "").replace("\r", "").replace(/  +/g, "")
+            }
+            await axios.post('http://localhost:5000/pedidos/add', pedido)
         }
     }
 

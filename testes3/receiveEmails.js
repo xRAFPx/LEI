@@ -139,7 +139,7 @@ const getEmails = () => {
     function translateEmail(message){
         if(message != undefined){
             var data = message.replace(/<label>/g, "").replace(/<\/label><br\/>/g, "").split('\n');
-
+            
             var pedido = new Pedidos();
             pedido.TipoDePedido = data[7].replace("Tipo de pedido: ", "").replace(";\r", "").replace(/  +/g, "");
             pedido.NaturezaDePedido = data[8].replace(" Natureza de pedido: ", "").replace(";\r", "").replace(/  +/g, "");
