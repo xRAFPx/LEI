@@ -20,7 +20,11 @@ smtpTransport.verify((error, success) => {
 });
 
 router.post('/send', (req, res, next) => {
-
+  var erro = ''
+  if (req.body.erro != null)
+  {
+    erro = req.body.erro
+  }
   const htmlContent = `
   <!DOCTYPE html>
  <html style="margin: 0; padding: 0;">  
@@ -34,7 +38,7 @@ router.post('/send', (req, res, next) => {
             <label>Requesitante: `+ req.body.requesitante +`;</label><br/>
             <label>Email: `+ req.body.email +`;</label><br/>
             <label>Contacto: `+ req.body.contacto +`;</label><br/>
-            <label>Erro: `+ req.body.erro +`;</label><br/>
+            <label>Erro: `+ erro +`;</label><br/>
             <label>Descricao: `+ req.body.descricao +`;</label><br/>
             <label>Prioridade: `+ req.body.prioridade +`</label><br/>
          </body>
@@ -80,7 +84,7 @@ router.post('/send', (req, res, next) => {
         console.log( "Email sent successfully")
         res.send({message: 'success'})
     }
-    // smtpTransport.close();
+    smtpTransport.close();
 })
   
 })
