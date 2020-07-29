@@ -7,10 +7,10 @@ import requestService from "./data/service.json";
 import requestType from "./data/requestType.json";
 import requestNature from "./data/requestNature.json";
 import requestPriority from "./data/requestPriority.json";
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import Media from 'react-bootstrap/Media';
 import Title from './components/Title';
-import screenshot from './Screenshot.jpg';
+import screenshot from './data/chp.png';
 
 class FormPage extends React.Component {
   constructor(props){

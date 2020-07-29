@@ -1,3 +1,162 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+  align-self: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.Title {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 3em;
+  margin-bottom: 2em;
+  background-color:#e1f5ff;
+  color: #005295;
+  position: relative;
+  text-align: center;
+}
+
+.top-left {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  right: 50%;
+}
+
+.headerImage {
+  width:22%;
+  height:22%;
+  left: 0%;
+}
+
+.top-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.container{   
+  height: 100%;  
+  display: flex;
+  max-width:100%;
+  flex-direction: column;
+  justify-content: center;
+  overflow:none;
+  font-size: 14px;
+}
+
+.requestButton {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #000000;
+  cursor: pointer;
+  padding: 0 30px;
+  display: inline-block;
+  margin: 10px 15px;
+  line-height: 2em;
+  letter-spacing: 1.5px;
+  font-size: 1em;
+  outline: none;
+  position: relative;
+  font-size: 14px;
+  border: 3px solid #cfcece;
+  background-color: #ffffff;
+  border-radius: 15px 15px 15px 15px;
+  transition: all .3s;
+}
+.containerButton{
+  text-align: center;
+}
+
+.requestButton:hover,
+.requestButton:focus {
+  border: 3px solid #005295;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 20; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.modal-content{  
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+  from {-webkit-transform:scale(0)} 
+  to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+  from {transform:scale(0)} 
+  to {transform:scale(1)}
+}
+
+/* Modal Content */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* 
 .files input {
     outline: 2px dashed #92b0b3;
     outline-offset: -10px;
@@ -26,4 +185,4 @@
     margin: 0 auto;
     background-size: 100%;
     background-repeat: no-repeat;
-  }
+  } */

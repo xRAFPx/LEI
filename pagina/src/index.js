@@ -5,7 +5,6 @@ import AppPage from './App';
 import FormPage from './components/Form';
 import NotFoundPage from './components/NotFound';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-
 import * as serviceWorker from './serviceWorker';
 
 const routing = (
@@ -14,7 +13,7 @@ const routing = (
       <Switch>
           <Route exact path="/" component={AppPage} />
           <Route path="/form" component={FormPage} />
-          <Route component={NotFoundPage} />
+          <Route path='*' component={NotFoundPage} />
         </Switch>
     </div>
   </Router>

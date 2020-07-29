@@ -1,17 +1,16 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
-import '../App.css';
+import './Form.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import requestService from "../data/service.json";
 import requestType from "../data/requestType.json";
 import requestNature from "../data/requestNature.json";
 import requestPriority from "../data/requestPriority.json";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Media from 'react-bootstrap/Media';
-import Title from '../components/Title';
+// import Media from 'react-bootstrap/Media';
+import Title from './Title';
 import axios from 'axios';
-// import Button from 'react-bootstrap/Button'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class FormPage extends React.Component {
   constructor(props){
@@ -24,23 +23,24 @@ class FormPage extends React.Component {
       requesterEmail:'something@email.com',
       requesterNum:'123456789',
       reqDescription:'',
-      reqScreenshot: "//:0",
-      reqPriority: requestPriority[1].Value,
-      reqFiles: [],
-      reqErro: 'Erro'
+      reqError:'',
+      reqScreenshot:"//:0",
+      reqPriority:requestPriority[1].Value,
+      reqFiles:[]
     };
 
     this.loadPicture = this.loadPicture.bind(this);
     this.closePicture = this.closePicture.bind(this);
-    // this.fileInput = React.createRef();
     this.handleRequestTypeChange = this.handleRequestTypeChange.bind(this);
     this.handleRequestNatChange = this.handleRequestNatChange.bind(this);
     this.handleRequestServChange = this.handleRequestServChange.bind(this);
+    this.handleRequestErrorChange = this.handleRequestErrorChange.bind(this);
     this.handleRequestDescChange = this.handleRequestDescChange.bind(this);
     this.handlePriorityChange = this.handlePriorityChange.bind(this);
     this.readUploadedFileAsText = this.readUploadedFileAsText.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   loadPicture() {
@@ -63,6 +63,10 @@ class FormPage extends React.Component {
 
   handleRequestServChange(event){
     this.setState({reqService:event.target.value});
+  }
+
+  handleRequestErrorChange(event){
+    this.setState({reqError:event.target.value});
   }
 
   handleRequestDescChange(event){
@@ -92,18 +96,22 @@ class FormPage extends React.Component {
   handleClick(event){
     event.preventDefault();
     var filesList = [];
-      Array.from(event.target.files).forEach(async f => {
+
+    Array.from(event.target.files).forEach(async f => {
         filesList.push({ filename: f.name, contentType: f.type, content: await this.readUploadedFileAsText(f)})
-      });
-      this.setState({reqFiles:filesList})
-    }
+    });
+
+    this.setState({reqFiles:filesList})      
+  }
 
   handleSubmit(event) {
     event.preventDefault();
-
-    var aux = this.state.reqScreenshot.split(';');
-    
-    var image = { filename: "Screenshot.png", contentType: aux[0].replace("data:", ""), content:  aux[1].replace("base64,", "")};
+    let image = null;
+    if (this.state.reqScreenshot != null)
+    {
+      var aux = this.state.reqScreenshot.split(';');
+      image = { filename: "Screenshot.png", contentType: aux[0].replace("data:", ""), content:  aux[1].replace("base64,", ""), encoding: 'base64'};
+    }
 
     axios({
       method: "POST", 
@@ -122,14 +130,17 @@ class FormPage extends React.Component {
         erro: this.state.reqErro
       }})
       .then((response)=>{
-      if (response.data.msg === 'success'){
+      if (response.data.message === 'success'){
           alert('Pedido de Intervenção enviado'); 
-          this.resetForm();
           window.history.back();
-      }else if(response.data.msg === 'fail'){
+      }else if(response.data.message === 'fail'){
           alert("'Pedido de Intervenção falhou no envio'")
       }
     })
+  }
+
+  handleCancel(){
+    window.history.back();
   }
 
   componentDidMount() {
@@ -138,7 +149,7 @@ class FormPage extends React.Component {
 
   render(){
     return (
-    <div>
+<div>
       <div id = "myModal" className = "modal">
         <span className="close" onClick={this.closePicture}>&times;</span>
         <img className="modal-content" id="img" alt='open'/>
@@ -147,12 +158,12 @@ class FormPage extends React.Component {
         <Title/>
         <h5>Novo Pedido</h5>
       </div>
-      <div className='formCcontainer'>
-        <Form onSubmit={this.handleSubmit}>
+      <div className='container'>
+      <Form onSubmit={this.handleSubmit}>
             <Form.Group as={Row} controlId="formRequestType">
               <Form.Label column sm="2">Tipo de pedido: </Form.Label>
               <Col sm="10">
-                <Form.Control size="sm" as="select" value={this.state.reqType} onChange={this.handleRequestTypeChange} htmlSize={5} custom>
+                <Form.Control size="sm" as="select" value={this.state.reqType} onChange={this.handleRequestTypeChange}>
                 {requestType.map((e, key) => {
                 return <option key={key} value={e.Value}>{e.Value}</option>;
                   })}
@@ -163,7 +174,7 @@ class FormPage extends React.Component {
             <Form.Group as={Row} controlId="formRequestNature">
               <Form.Label column sm="2">Natureza do pedido: </Form.Label>
               <Col sm="10">
-                <Form.Control size="sm" as="select" value={this.state.reqNature} onChange={this.handleRequestNatChange} htmlSize={5} custom>
+                <Form.Control size="sm" as="select" value={this.state.reqNature} onChange={this.handleRequestNatChange}>
                   {requestNature.map((e, key) => {
                   return <option key={key} value={e.Value}>{e.Value}</option>;
                     })}
@@ -174,7 +185,7 @@ class FormPage extends React.Component {
             <Form.Group as={Row} controlId="formService">
               <Form.Label column sm="2">Serviço: </Form.Label>
               <Col sm="10">
-                <Form.Control size="sm" as="select" value={this.state.reqService} onChange={this.handleRequestServChange} htmlSize={5} custom>
+                <Form.Control size="sm" as="select" value={this.state.reqService} onChange={this.handleRequestServChange}>
                 {requestService.map((e, key) => {
                 return <option key={key} value={e.Value}>{e.Value}</option>;
                   })}
@@ -203,30 +214,33 @@ class FormPage extends React.Component {
               </Col>
             </Form.Group>
 
+            <Form.Group as={Row} controlId="formError">
+              <Form.Label column sm="2">Assunto: </Form.Label>
+              <Col sm="10">
+                <Form.Control size="sm" as="textarea" value={this.state.reqError} onChange={this.handleRequestErrorChange}/>
+              </Col>
+            </Form.Group>
+
             <Form.Group as={Row} controlId="formDescription">
               <Form.Label column sm="2">Descrição: </Form.Label>
               <Col sm="10">
                 <Form.Control size="sm" as="textarea" rows="5" value={this.state.reqDescription} onChange={this.handleRequestDescChange} required/>
-                <Form.Control.Feedback type="invalid">
-                  Por favor indique uma descrição do seu pedido.
-                </Form.Control.Feedback>
               </Col>
             </Form.Group>
 
             <Form.Group as={Row} controlId="formScreenshot">
               <Form.Label column sm="2">Captura automática de ecrã: </Form.Label>
               <Col sm="10">
-                <Media as="li">
-                  <img id ='image' onClick={this.loadPicture} width={300} height={300} className="mr-3" src={this.state.reqScreenshot} alt="Screenshot" />
-                </Media>
+                {/* <Media as="li"> */}
+                  <img id ='image' onClick={this.loadPicture} height={240} className="mr-3" src={this.state.reqScreenshot} alt="Screenshot" />
+                {/* </Media> */}
               </Col>
             </Form.Group>
                             
             <Form.Group as={Row} controlId="formAttachments">
               <Form.Label column sm="2">Anexos: </Form.Label>
               <Col sm="10">
-                <Form.File id="formControlFile" type="file" className="input-file" multiple onChange={this.handleClick}/>
-                {/* <input id="formControlFile"  type="file" className="input-file" multiple onChange={this.handleClick}/> */}
+              <Form.File id="formControlFile" type="file" className="input-file" multiple onChange={this.handleClick}/>
               </Col>
             </Form.Group>
 
@@ -241,10 +255,9 @@ class FormPage extends React.Component {
               </Col>
             </Form.Group>
             <div className='containerButton'>
-              <button className = 'requestButton' variant="primary" type="submit" onClick={this.handleSubmit}>Confirmar</button>
-              <button className = 'requestButton' type="button" value="cancel">Cancelar</button>
+              <button className = 'requestButton' variant="primary" type="submit">Confirmar</button>
+              <button className = 'requestButton' type="button" value="cancel" onClick={this.handleCancel}>Cancelar</button>
             </div>
-            
           </Form>
       </div>
     </div>   
