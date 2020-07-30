@@ -29,7 +29,8 @@ class PopupComponent extends React.Component {
       this.closeModal();
       this.setState({image:'//:0'})
       const screenshot = {
-        screenshot: this.state.image
+        screenshot: null,
+        showScreenshot: false
       }
       this.props.history.push({
           pathname: '/form',
@@ -41,8 +42,10 @@ class PopupComponent extends React.Component {
       this.closeModal();
       const canvas = await html2canvas(document.body, {useCORS: true})
       this.setState({image: canvas.toDataURL()})
+
       const screenshot = {
-        screenshot: this.state.image
+        screenshot: this.state.image,
+        showScreenshot: true
       }
       this.props.history.push({
           pathname: '/form',

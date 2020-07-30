@@ -24,6 +24,7 @@ class FormPage extends React.Component {
       reqDescription:'',
       reqError:'',
       reqScreenshot:"//:0",
+      showScreenshot:false,
       reqPriority:requestPriority[1].Value,
       reqFiles:[]
     };
@@ -40,7 +41,6 @@ class FormPage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
-    this.createScreenshotStructure = this.createScreenshotStructure.bind(this);
   }
 
   loadPicture() {
@@ -142,35 +142,9 @@ class FormPage extends React.Component {
     window.history.back();
   }
 
-  createScreenshotStructure()
-  {
-    var x = document.getElementById("screenshotSpot");
-    x.innerText = 'Captura automática de ecrã: '
-    x.className= "form-label col-form-label col-sm-2"
-
-    var form = document.getElementById("formScreenshot")
-    var col = document.createElement("div")
-    col.className = 'col-sm-10'
-
-    var node = document.createElement("img");  
-    node.src = this.props.location.state.screenshot;
-
-    node.onclick = this.loadPicture
-    node.className = 'mr-3';
-    node.alt = "Screenshot";
-    node.height = 240;
-    node.id = 'image';
-
-    col.appendChild(node)
-    form.appendChild(col)
-  }
-
   componentDidMount() {
-    if (this.props.location.state.screenshot !== null)
-    {
-      this.createScreenshotStructure()
-    }
     this.setState({reqScreenshot: this.props.location.state.screenshot});
+    this.setState({showScreenshot: this.props.location.state.showScreenshot})
   }
 
   render( ){
@@ -255,11 +229,19 @@ class FormPage extends React.Component {
                 <Form.Control size="sm" as="textarea" rows="5" value={this.state.reqDescription} onChange={this.handleRequestDescChange} required/>
               </Col>
             </Form.Group>
-
+            
+             {this.state.showScreenshot ?
+             (
               <Form.Group as={Row} controlId="formScreenshot" id='formScreenshot'>
-              <Form.Label id='screenshotSpot'column sm="2"></Form.Label>
-            </Form.Group>
-                  
+                <Form.Label column sm="2">Captura de ecrã: </Form.Label>
+                <Col sm="10">
+                  <img onClick={this.loadPicture} alt='Screenshot' id='image' height={240} src={this.state.reqScreenshot}/>
+                </Col>
+              </Form.Group>
+            ) 
+            : null
+             }     
+
             <Form.Group as={Row} controlId="formAttachments">
               <Form.Label column sm="2">Anexos: </Form.Label>
               <Col sm="10">
