@@ -77,7 +77,7 @@ const getEmails = () => {
      */
     function listMessages(auth) {
     try{
-        const userID = 'a1234cavado@gmail.com';
+        const userID = 'lei.project2020@gmail.com';
         const gmail = google.gmail({version: 'v1', auth});
         gmail.users.messages.list({
             'userId': userID,
@@ -87,7 +87,7 @@ const getEmails = () => {
             const messages = res.data.messages;
             if (messages != undefined && messages.length) {        
                 readMessages(gmail, userID, messages);
-                // changeMessages(gmail, userID, messages)
+                changeMessages(gmail, userID, messages)
             } else {
             console.log('No messages found.');
             }

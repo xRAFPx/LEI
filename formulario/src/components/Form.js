@@ -103,17 +103,16 @@ class FormPage extends React.Component {
     this.setState({reqFiles:filesList})      
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
     let image = null;
     if (this.state.reqScreenshot != null)
     {
       image = { filename: "Screenshot.png", path:this.state.reqScreenshot};
     }
-
-    axios({
+    await axios({
       method: "POST", 
-      url:"http://localhost:5000/form/send", 
+      url:"http://localhost:5001/form/send", 
       data: {
         tipoPedido: this.state.reqType,   
         naturezaPedido: this.state.reqNature,  
@@ -125,10 +124,11 @@ class FormPage extends React.Component {
         prioridade: this.state.reqPriority,
         imagem: image,
         ficheiros: this.state.reqFiles,
-        erro: this.state.reqErro
+        erro: this.state.reqError
       }})
       .then((response)=>{
       if (response.data.message === 'success'){
+        axios.post('http://localhost:5000/api/receiveEmail')
         console.log(this.state.reqFiles)
           alert('Pedido de Intervenção enviado'); 
           window.history.back();
