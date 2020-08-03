@@ -29,7 +29,7 @@ class PopupComponent extends React.Component {
       this.closeModal();
       this.setState({image:'//:0'})
       const screenshot = {
-        screenshot: null,
+        screenshot: this.state.image,
         showScreenshot: false
       }
       this.props.history.push({

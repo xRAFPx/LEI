@@ -21,7 +21,6 @@ smtpTransport.verify((error, success) => {
 
 router.post('/send', (req, res, next) => {
   var erro = ''
-  console.log(req.body.erro)
   if (req.body.erro != null)
   {
     erro = req.body.erro
